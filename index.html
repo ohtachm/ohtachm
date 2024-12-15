@@ -11,6 +11,10 @@ const TodoApp = () => {
         { id: '3', text: '洗濯', completed: false },
         { id: '4', text: 'ヨガ（10分）', completed: false, category: 'S', duration: 10 },
         { id: '5', text: '体重測定', completed: false },
+        { id: '6', text: '身支度（15分）', completed: false },
+        { id: '7', text: '白湯', completed: false },
+        { id: '8', text: '記録・スケジュール（15分）', completed: false, category: 'S', duration: 15 },
+        { id: '9', text: '洗濯物干し（15分）', completed: false, category: 'H', duration: 15 },
       ]
     },
     {
@@ -18,104 +22,279 @@ const TodoApp = () => {
       tasks: [
         { id: 'a', text: 'コーヒー', completed: false },
         { id: 'b', text: '読書（15分）', completed: false, category: 'S', duration: 15 },
+        { id: 'c', text: '最重要タスク①（15分）', completed: false, category: 'S', duration: 15 },
+        { id: 'd', text: '最重要タスク②（15分）', completed: false, category: 'S', duration: 15 },
+        { id: 'e', text: '最重要タスク③（15分）', completed: false, category: 'S', duration: 15 },
+      ]
+    },
+    {
+      time: "6:00",
+      tasks: [
+        { id: 'A', text: '教材研究（15分）', completed: false, category: 'S', duration: 15 },
+        { id: 'B', text: 'Workplace（15分）', completed: false, category: 'S', duration: 15 },
+        { id: 'C', text: 'ウォーキング（15分）', completed: false, category: 'S', duration: 15 },
+      ]
+    },
+    {
+      time: "7:30",
+      tasks: [
+        { id: 'x', text: '英語（15分）', completed: false, category: 'E', duration: 15 },
+        { id: 'y', text: '英語（15分）', completed: false, category: 'E', duration: 15 },
+        { id: 'z', text: '英単語（5分）', completed: false, category: 'E', duration: 5 },
+      ]
+    },
+    {
+      time: "15:50",
+      tasks: [
+        { id: 'n1', text: '学級通信（20分）', completed: false, category: 'S', duration: 20 },
+        { id: 'n2', text: '教材研究（30分）', completed: false, category: 'S', duration: 30 },
+        { id: 'n3', text: '日記コメント（15分）', completed: false, category: 'M', duration: 15 },
+      ]
+    },
+    {
+      time: "17:30",
+      tasks: [
+        { id: 'P', text: '風呂スイッチ', completed: false },
+        { id: 'Q', text: '掃除（5分）', completed: false, category: 'H', duration: 5 },
+        { id: 'R', text: 'スクワット（5分）', completed: false, category: 'S', duration: 5 },
+        { id: 'S', text: 'ヨーグルト・フルグラ（5分）', completed: false, category: 'L', duration: 5 },
+        { id: 'T', text: '入浴・瞑想（15分）', completed: false, category: 'S', duration: 15 },
+      ]
+    },
+    {
+      time: "18:15",
+      tasks: [
+        { id: 'm', text: 'Workplace（30分）', completed: false, category: 'S', duration: 30 },
+        { id: 'n', text: '新宝島動画分析（15分）', completed: false, category: 'S', duration: 15 },
+        { id: 'o', text: '向国論文（15分）', completed: false, category: 'S', duration: 15 },
+      ]
+    },
+    {
+      time: "19:20",
+      tasks: [
+        { id: 'U', text: '日記コメント（15分）', completed: false, category: 'M', duration: 15 },
+        { id: 'V', text: '手帳→英作文（15分）', completed: false, category: 'E', duration: 15 },
+      ]
+    },
+    {
+      time: "21:00",
+      tasks: [
+        { id: 'W', text: 'Expressive Writing（15分）', completed: false, category: 'S', duration: 15 },
+        { id: 'X', text: '読書（15分）', completed: false, category: 'S', duration: 15 },
       ]
     }
   ]);
 
-  const [newTask, setNewTask] = useState({ category: 'E', text: '', duration: 5 });
+  const [customTasks, setCustomTasks] = useState({
+    E: [],
+    S: [],
+    M: [],
+    L: [],
+    H: []
+  });
+
+  const [newTask, setNewTask] = useState({
+    category: 'E',
+    text: '',
+    duration: 5
+  });
 
   const toggleTask = (timeIndex, taskId) => {
-    const updatedSchedule = [...schedule];
-    const task = updatedSchedule[timeIndex].tasks.find((t) => t.id === taskId);
-    if (task) task.completed = !task.completed;
-    setSchedule(updatedSchedule);
+    const newSchedule = [...schedule];
+    const task = newSchedule[timeIndex].tasks.find(t => t.id === taskId);
+    if (task) {
+      task.completed = !task.completed;
+    }
+    setSchedule(newSchedule);
+  };
+
+  const toggleCustomTask = (category, index) => {
+    const newCustomTasks = {...customTasks};
+    newCustomTasks[category][index].completed = !newCustomTasks[category][index].completed;
+    setCustomTasks(newCustomTasks);
   };
 
   const resetTasks = () => {
-    setSchedule(schedule.map((timeBlock) => ({
+    // Reset scheduled tasks
+    const resetSchedule = schedule.map(timeBlock => ({
       ...timeBlock,
-      tasks: timeBlock.tasks.map((task) => ({ ...task, completed: false })),
-    })));
+      tasks: timeBlock.tasks.map(task => ({ ...task, completed: false }))
+    }));
+    setSchedule(resetSchedule);
+
+    // Reset custom tasks
+    const resetCustomTasks = {...customTasks};
+    Object.keys(resetCustomTasks).forEach(category => {
+      resetCustomTasks[category] = resetCustomTasks[category].map(task => ({ ...task, completed: false }));
+    });
+    setCustomTasks(resetCustomTasks);
   };
 
   const addCustomTask = () => {
-    if (newTask.text && newTask.duration) {
-      const newEntry = {
+    if (newTask.text) {
+      const taskToAdd = {
         text: `${newTask.text}（${newTask.duration}分）`,
-        completed: false,
+        completed: true,
         category: newTask.category,
-        duration: parseInt(newTask.duration),
+        duration: parseInt(newTask.duration)
       };
-      setSchedule((prev) => [
+
+      setCustomTasks(prev => ({
         ...prev,
-        {
-          time: "新しい時間",
-          tasks: [newEntry],
-        },
-      ]);
-      setNewTask({ category: 'E', text: '', duration: 5 });
+        [newTask.category]: [...prev[newTask.category], taskToAdd]
+      }));
+
+      // Reset input
+      setNewTask({
+        category: 'E',
+        text: '',
+        duration: 5
+      });
     }
   };
 
+  const timeSummary = useMemo(() => {
+    const categories = ['E', 'S', 'M', 'L', 'H'];
+    const summary = {};
+
+    categories.forEach(category => {
+      // Calculate time from scheduled tasks
+      const scheduledTime = schedule.reduce((total, timeBlock) => {
+        const categoryTime = timeBlock.tasks
+          .filter(task => task.category === category && task.duration && task.completed)
+          .reduce((sum, task) => sum + task.duration, 0);
+        return total + categoryTime;
+      }, 0);
+
+      // Calculate time from custom tasks
+      const customTime = customTasks[category].reduce((total, task) => {
+        return task.completed ? total + task.duration : total;
+      }, 0);
+
+      summary[category] = scheduledTime + customTime;
+    });
+
+    return summary;
+  }, [schedule, customTasks]);
+
   return (
-    <div className="max-w-lg mx-auto bg-gray-50 shadow-lg rounded-xl p-6 mt-6">
-      <div className="text-center mb-6">
-        <h1 className="text-4xl font-bold text-blue-800">My Routine</h1>
-        <button
-          onClick={resetTasks}
-          className="text-xl text-red-500 hover:text-red-700 mt-4"
-        >
-          リセット
-        </button>
-      </div>
-
-      {schedule.map((block, index) => (
-        <div key={block.time} className="bg-white p-6 rounded-lg shadow-md mb-6">
-          <h2 className="text-3xl font-semibold text-gray-800 mb-4">{block.time}</h2>
-          {block.tasks.map((task) => (
-            <div
-              key={task.id}
-              className="flex items-center p-4 bg-gray-50 rounded-lg shadow-sm mb-3 cursor-pointer"
-              onClick={() => toggleTask(index, task.id)}
-            >
-              {task.completed ? (
-                <CheckCircle color="green" size={32} />
-              ) : (
-                <Circle color="gray" size={32} />
-              )}
-              <span className={`ml-6 text-2xl ${task.completed ? 'line-through text-gray-400' : 'text-gray-800'}`}>
-                {task.text}
-              </span>
-            </div>
-          ))}
-        </div>
-      ))}
-
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-3xl font-semibold text-gray-800 mb-6">新しいタスクを追加</h3>
-        <div className="space-y-4">
-          <input
-            type="text"
-            placeholder="タスク名"
-            value={newTask.text}
-            onChange={(e) => setNewTask((prev) => ({ ...prev, text: e.target.value }))}
-            className="w-full p-4 text-2xl border rounded-lg"
-          />
-          <input
-            type="number"
-            placeholder="時間（分）"
-            value={newTask.duration}
-            onChange={(e) => setNewTask((prev) => ({ ...prev, duration: e.target.value }))}
-            className="w-full p-4 text-2xl border rounded-lg"
-          />
-          <button
-            onClick={addCustomTask}
-            className="w-full bg-blue-500 text-white p-4 text-2xl rounded-lg hover:bg-blue-700"
+    <div className="max-w-md mx-auto bg-gray-100 min-h-screen p-4">
+      <div className="bg-white shadow-md rounded-lg">
+        <div className="flex justify-between items-center p-4 border-b">
+          <h1 className="text-2xl font-bold text-gray-800">My Routine</h1>
+          <button 
+            onClick={resetTasks} 
+            className="text-blue-500 hover:text-blue-700 transition-colors"
           >
-            <Plus size={28} className="inline-block mr-2" />
-            タスクを追加
+            リセット
           </button>
         </div>
+        
+        <div className="p-4 bg-gray-50 border-b">
+          <h2 className="text-lg font-semibold mb-2">チェック済み時間</h2>
+          <div className="grid grid-cols-5 gap-2 text-center">
+            {Object.entries(timeSummary).map(([category, time]) => (
+              <div key={category} className="bg-white p-2 rounded shadow-sm">
+                <div className="font-bold text-gray-700">{category}</div>
+                <div className="text-blue-600">{time}分</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* New Task Input Section */}
+        <div className="p-4 border-b">
+          <div className="flex items-center space-x-2 mb-2">
+            <select 
+              value={newTask.category}
+              onChange={(e) => setNewTask(prev => ({...prev, category: e.target.value}))}
+              className="border rounded p-1"
+            >
+              {['E', 'S', 'M', 'L', 'H'].map(cat => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
+            <input 
+              type="text" 
+              placeholder="タスク名" 
+              value={newTask.text}
+              onChange={(e) => setNewTask(prev => ({...prev, text: e.target.value}))}
+              className="border rounded p-1 flex-grow"
+            />
+            <select 
+              value={newTask.duration}
+              onChange={(e) => setNewTask(prev => ({...prev, duration: parseInt(e.target.value)}))}
+              className="border rounded p-1 w-20"
+            >
+              {[5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60].map(duration => (
+                <option key={duration} value={duration}>{duration}分</option>
+              ))}
+            </select>
+            <button 
+              onClick={addCustomTask}
+              className="bg-blue-500 text-white rounded p-1"
+            >
+              <Plus size={20} />
+            </button>
+          </div>
+        </div>
+
+        {/* Custom Tasks Section */}
+        {Object.entries(customTasks).map(([category, tasks]) => tasks.length > 0 && (
+          <div key={category} className="p-4 border-b">
+            <h2 className="text-xl font-semibold text-gray-700 mb-3">{category}カテゴリー</h2>
+            {tasks.map((task, index) => (
+              <div 
+                key={`${category}-${index}`} 
+                className="flex items-center mb-2 cursor-pointer"
+                onClick={() => toggleCustomTask(category, index)}
+              >
+                {task.completed ? (
+                  <CheckCircle color="lightblue" size={24} className="mr-3" />
+                ) : (
+                  <Circle color="gray" size={24} className="mr-3" />
+                )}
+                <span 
+                  className={`text-base ${
+                    task.completed 
+                      ? 'line-through text-gray-400' 
+                      : 'text-gray-800'
+                  }`}
+                >
+                  {task.text}
+                </span>
+              </div>
+            ))}
+          </div>
+        ))}
+
+        {schedule.map((timeBlock, timeIndex) => (
+          <div key={timeBlock.time} className="p-4 border-b last:border-b-0">
+            <h2 className="text-xl font-semibold text-gray-700 mb-3">{timeBlock.time}</h2>
+            {timeBlock.tasks.map(task => (
+              <div 
+                key={task.id} 
+                className="flex items-center mb-2 cursor-pointer"
+                onClick={() => toggleTask(timeIndex, task.id)}
+              >
+                {task.completed ? (
+                  <CheckCircle color="lightblue" size={24} className="mr-3" />
+                ) : (
+                  <Circle color="gray" size={24} className="mr-3" />
+                )}
+                <span 
+                  className={`text-base ${
+                    task.completed 
+                      ? 'line-through text-gray-400' 
+                      : 'text-gray-800'
+                  }`}
+                >
+                  {task.text}
+                </span>
+              </div>
+            ))}
+          </div>
+        ))}
       </div>
     </div>
   );
