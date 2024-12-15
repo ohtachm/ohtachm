@@ -9,15 +9,21 @@
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            line-height: 1.6;
+            line-height: 1.8;
+            font-size: 18px; /* 全体の文字サイズを大きく */
+        }
+        h1 {
+            font-size: 28px; /* タイトルの文字サイズ */
+            text-align: center;
         }
         .category-summary {
             display: flex;
             justify-content: space-between;
             background-color: #f4f4f4;
-            padding: 10px;
+            padding: 15px; /* 余白を調整 */
             margin-bottom: 20px;
             border-radius: 5px;
+            font-size: 20px; /* カテゴリーサマリーの文字サイズ */
         }
         .category-item {
             text-align: center;
@@ -25,10 +31,11 @@
         }
         .task-list {
             border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
         }
         .task-time {
+            font-size: 22px; /* 時間の文字サイズ */
             font-weight: bold;
             color: #333;
             display: block;
@@ -37,19 +44,20 @@
         .task-item {
             display: flex;
             align-items: center;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
         }
         .task-category {
             margin-left: 5px;
-            padding: 2px 5px;
+            padding: 2px 8px;
             border-radius: 3px;
+            font-size: 20px; /* タスク名の文字サイズ */
         }
         .checkbox {
-            width: 20px;
-            height: 20px;
+            width: 24px; /* チェックボックスを大きく */
+            height: 24px;
             border-radius: 50%;
             border: 2px solid #007bff;
-            margin-right: 5px;
+            margin-right: 10px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -62,7 +70,7 @@
         .checkbox.checked::after {
             content: '✓';
             color: white;
-            font-size: 12px;
+            font-size: 16px; /* チェックマークのサイズ */
         }
         .E { background-color: #e6f2ff; }
         .S { background-color: #e6ffe6; }
@@ -90,52 +98,9 @@
                 { name: 'ポットスイッチ→うがい→洗濯', category: 'H', duration: 0 },
                 { name: 'ヨガ（10分）', category: 'S', duration: 10 },
                 { name: '英語（15分）', category: 'E', duration: 15 },
-                { name: '体重測定', category: '', duration: 0 },
-                { name: '身支度', category: '', duration: 0 },
-                { name: '白湯', category: '', duration: 0 },
-                { name: '記録・スケジュール（15分）', category: 'S', duration: 15 },
-                { name: '洗濯物干し（15分）', category: 'H', duration: 15 }
             ]},
             { time: '5:30', tasks: [
                 { name: 'コーヒー', category: '', duration: 0 },
-                { name: '読書（15分）', category: 'S', duration: 15 },
-                { name: '最重要タスク①（15分）', category: 'S', duration: 15 },
-                { name: '最重要タスク②（15分）', category: 'S', duration: 15 }
-            ]},
-            { time: '6:00', tasks: [
-                { name: '最重要タスク③（15分）', category: 'S', duration: 15 },
-                { name: '教材研究（15分）', category: 'S', duration: 15 },
-                { name: 'Workplace（15分）', category: 'S', duration: 15 },
-                { name: 'ウォーキング（15分）', category: 'S', duration: 15 }
-            ]},
-            { time: '7:30', tasks: [
-                { name: '英語①（15分）', category: 'E', duration: 15 },
-                { name: '英語②（15分）', category: 'E', duration: 15 },
-                { name: '英単語（5分）', category: '', duration: 5 }
-            ]},
-            { time: '15:50', tasks: [
-                { name: '学級通信（20分）', category: '', duration: 20 },
-                { name: '教材研究（30分）', category: 'S', duration: 30 },
-                { name: '日記コメント（15分）', category: 'M', duration: 15 }
-            ]},
-            { time: '17:30', tasks: [
-                { name: '風呂スイッチ', category: '', duration: 0 },
-                { name: '掃除（5分）', category: 'H', duration: 5 },
-                { name: 'スクワット（5分）', category: 'S', duration: 5 },
-                { name: 'ヨーグルト・フルグラ（5分）', category: 'L', duration: 5 },
-                { name: '入浴・瞑想（15分）', category: 'S', duration: 15 }
-            ]},
-            { time: '18:15', tasks: [
-                { name: 'Workplace（30分）', category: 'S', duration: 30 },
-                { name: '新宝島動画分析（15分）', category: 'S', duration: 15 },
-                { name: '向国論文（15分）', category: 'S', duration: 15 }
-            ]},
-            { time: '19:20', tasks: [
-                { name: '日記コメント（15分）', category: 'M', duration: 15 },
-                { name: '手帳→英作文（15分）', category: 'E', duration: 15 }
-            ]},
-            { time: '21:00', tasks: [
-                { name: 'Expressive Writing（15分）', category: 'S', duration: 15 },
                 { name: '読書（15分）', category: 'S', duration: 15 }
             ]}
         ];
@@ -170,11 +135,9 @@
                 </div>
             `).join('');
 
-            // Add event listeners to checkboxes
             document.querySelectorAll('.checkbox').forEach(checkbox => {
                 checkbox.addEventListener('click', function() {
                     this.classList.toggle('checked');
-                    
                     const time = parseInt(this.dataset.time);
                     const category = this.dataset.category;
 
@@ -183,13 +146,11 @@
                     } else if (category) {
                         categorySummary[category] -= time;
                     }
-
                     updateCategorySummary();
                 });
             });
         }
 
-        // Initialize
         renderRoutine();
         updateCategorySummary();
     </script>
