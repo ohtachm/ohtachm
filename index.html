@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TodoApp</title>
+  <!-- ReactとReactDOMのCDN -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    // Reactコードを記述
+    import React, { useState, useMemo } from 'react';
+    import { CheckCircle, Circle, Plus } from 'lucide-react';
+
+    const TodoApp = () => {
+      const [schedule, setSchedule] = useState([...]);
+      const [customTasks, setCustomTasks] = useState({ E: [], S: [], M: [], L: [], H: [] });
+      const [newTask, setNewTask] = useState({ category: 'E', text: '', duration: 5 });
+
+      const toggleTask = (timeIndex, taskId) => {
+        const newSchedule = [...schedule];
+        const task = newSchedule[timeIndex].tasks.find(t => t.id === taskId);
+        if (task) task.completed = !task.completed;
+        setSchedule(newSchedule);
+      };
+
+      const toggleCustomTask = (category, index) => {
+        const newCustomTasks = {...customTasks};
+        newCustomTasks[category][index].completed = !newCustomTasks[category][index].completed;
+        setCustomTasks(newCustomTasks);
+      };
+
+      const resetTasks = () => { /* Reset Logic */ };
+      const addCustomTask = () => { /* Add Task Logic */ };
+
+      const timeSummary = useMemo(() => {
+        const categories = ['E', 'S', 'M', 'L', 'H'];
+        const summary = {};
+        categories.forEach(category => { /* Calculate Summary */ });
+        return summary;
+      }, [schedule, customTasks]);
+
+      return (
+        <div className="max-w-md mx-auto bg-gray-100 min-h-screen p-4">
+          <div className="bg-white shadow-md rounded-lg">
+            <div className="flex justify-between items-center p-4 border-b">
+              <h1 className="text-2xl font-bold text-gray-800">My Routine</h1>
+              <button onClick={resetTasks} className="text-blue-500 hover:text-blue-700">リセット</button>
+            </div>
+            <div className="p-4 bg-gray-50 border-b">
+              <h2 className="text-lg font-semibold mb-2">チェック済み時間</h2>
+              <div className="grid grid-cols-5 gap-2 text-center">
+                {Object.entries(timeSummary).map(([category, time]) => (
+                  <div key={category} className="bg-white p-2 rounded shadow-sm">
+                    <div className="font-bold text-gray-700">{category}</div>
+                    <div className="text-blue-600">{time}分</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<TodoApp />);
+  </script>
+</body>
+</html>
