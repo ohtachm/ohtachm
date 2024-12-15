@@ -12,7 +12,7 @@
             line-height: 1.5;
         }
         h1 {
-            font-size: 80px;
+            font-size: 90px; /* タイトルサイズを10px大きく */
             text-align: center;
             margin-bottom: 30px;
         }
@@ -21,7 +21,7 @@
             justify-content: space-between;
             padding: 15px;
             margin-bottom: 20px;
-            font-size: 40px;
+            font-size: 50px; /* 集計セクションを10px大きく */
             background-color: #f4f4f4;
             border-radius: 10px;
         }
@@ -31,7 +31,7 @@
         }
         .form-container {
             margin-bottom: 40px;
-            font-size: 30px;
+            font-size: 40px; /* フォームサイズを10px大きく */
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -40,8 +40,8 @@
         .form-container input,
         .form-container button {
             margin-right: 10px;
-            font-size: 30px;
-            padding: 5px;
+            font-size: 40px; /* フォーム要素を10px大きく */
+            padding: 10px;
             flex-grow: 1;
         }
         .form-container button {
@@ -56,7 +56,7 @@
             margin-bottom: 40px;
         }
         .task-time {
-            font-size: 60px;
+            font-size: 70px; /* 時間の文字サイズ */
             font-weight: bold;
             color: #333;
             margin-bottom: 20px;
@@ -64,12 +64,12 @@
         .task-item {
             display: flex;
             align-items: center;
-            font-size: 60px;
+            font-size: 70px; /* リストのフォントサイズを10px大きく */
             margin-bottom: 15px;
         }
         .checkbox {
-            width: 60px;
-            height: 60px;
+            width: 70px; /* チェックボックスを10px大きく */
+            height: 70px;
             border-radius: 50%;
             border: 3px solid #007bff;
             margin-right: 15px;
@@ -109,7 +109,14 @@
         </select>
         <input type="text" id="taskName" placeholder="タスク名を入力" />
         <select id="duration">
-            ${Array.from({ length: 12 }, (_, i) => `<option value="${(i + 1) * 5}">${(i + 1) * 5}分</option>`).join('')}
+            <option value="5">5分</option>
+            <option value="10">10分</option>
+            <option value="15">15分</option>
+            <option value="20">20分</option>
+            <option value="25">25分</option>
+            <option value="30">30分</option>
+            <option value="45">45分</option>
+            <option value="60">60分</option>
         </select>
         <button id="addTask">＋</button>
     </div>
