@@ -10,10 +10,10 @@
             margin: 0 auto;
             padding: 20px;
             line-height: 1.8;
-            font-size: 18px; /* 全体の文字サイズ */
+            font-size: 18px;
         }
         h1 {
-            font-size: 28px; /* タイトルの文字サイズ */
+            font-size: 36px; /* タイトルの文字サイズ */
             text-align: center;
         }
         .category-summary {
@@ -23,7 +23,7 @@
             padding: 15px;
             margin-bottom: 20px;
             border-radius: 5px;
-            font-size: 20px; /* カテゴリーの文字サイズ */
+            font-size: 20px;
         }
         .category-item {
             text-align: center;
@@ -31,33 +31,33 @@
         }
         .task-list {
             border-bottom: 1px solid #ddd;
-            padding-bottom: 15px;
-            margin-bottom: 15px;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
         }
         .task-time {
-            font-size: 22px; /* 時間の文字サイズ */
+            font-size: 40px; /* 時間の文字サイズ */
             font-weight: bold;
             color: #333;
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
         .task-item {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
-            font-size: 22px; /* リストの文字サイズを大きく */
+            margin-bottom: 15px;
+            font-size: 40px; /* リストの文字サイズを40pxに変更 */
         }
         .task-category {
-            margin-left: 5px;
-            padding: 2px 8px;
-            border-radius: 3px;
-            font-size: 22px; /* タスクの文字サイズを大きく */
+            margin-left: 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 40px; /* タスクカテゴリの文字サイズを40pxに変更 */
         }
         .checkbox {
-            width: 28px; /* チェックボックスを大きく */
-            height: 28px;
+            width: 40px; /* チェックボックスを大きく */
+            height: 40px;
             border-radius: 50%;
-            border: 2px solid #007bff;
+            border: 3px solid #007bff;
             margin-right: 15px;
             cursor: pointer;
             display: flex;
@@ -71,7 +71,7 @@
         .checkbox.checked::after {
             content: '✓';
             color: white;
-            font-size: 16px;
+            font-size: 24px; /* チェックマークのサイズを大きく */
         }
         .E { background-color: #e6f2ff; }
         .S { background-color: #e6ffe6; }
@@ -103,6 +103,10 @@
             { time: '5:30', tasks: [
                 { name: 'コーヒー', category: '', duration: 0 },
                 { name: '読書（15分）', category: 'S', duration: 15 }
+            ]},
+            { time: '6:00', tasks: [
+                { name: '教材研究（15分）', category: 'S', duration: 15 },
+                { name: 'ウォーキング（15分）', category: 'S', duration: 15 }
             ]}
         ];
 
