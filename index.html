@@ -69,17 +69,17 @@
     <script>
         const routine = [
             { time: '4:30', tasks: [
-                { name: 'ポットスイッチ→うがい→洗濯', category: 'H', duration: 0 },
+                { name: 'ポットスイッチ→うがい→洗濯', duration: 0 },
                 { name: 'ヨガ（10分）', category: 'S', duration: 10 },
                 { name: '英語（15分）', category: 'E', duration: 15 },
-                { name: '体重測定', category: '', duration: 0 },
-                { name: '身支度', category: '', duration: 0 },
-                { name: '白湯', category: '', duration: 0 },
+                { name: '体重測定', duration: 0 },
+                { name: '身支度', duration: 0 },
+                { name: '白湯', duration: 0 },
                 { name: '記録・スケジュール（15分）', category: 'S', duration: 15 },
                 { name: '洗濯物干し（15分）', category: 'H', duration: 15 },
             ]},
             { time: '5:30', tasks: [
-                { name: 'コーヒー', category: '', duration: 0 },
+                { name: 'コーヒー', duration: 0 },
                 { name: '読書（15分）', category: 'S', duration: 15 },
                 { name: '最重要タスク①（15分）', category: 'S', duration: 15 },
                 { name: '最重要タスク②（15分）', category: 'S', duration: 15 },
@@ -93,15 +93,15 @@
             { time: '7:30', tasks: [
                 { name: '英語①（15分）', category: 'E', duration: 15 },
                 { name: '英語②（15分）', category: 'E', duration: 15 },
-                { name: '英単語（5分）', category: 'E', duration: 5 },
+                { name: '英単語（5分）', duration: 5 },
             ]},
             { time: '15:50', tasks: [
-                { name: '学級通信（20分）', category: 'M', duration: 20 },
+                { name: '学級通信（20分）', duration: 20 },
                 { name: '教材研究（30分）', category: 'S', duration: 30 },
                 { name: '日記コメント（15分）', category: 'M', duration: 15 },
             ]},
             { time: '17:30', tasks: [
-                { name: '風呂スイッチ', category: '', duration: 0 },
+                { name: '風呂スイッチ', duration: 0 },
                 { name: '掃除（5分）', category: 'H', duration: 5 },
                 { name: 'スクワット（5分）', category: 'S', duration: 5 },
                 { name: 'ヨーグルト・フルグラ（5分）', category: 'L', duration: 5 },
@@ -141,7 +141,7 @@
                         <div class="task-item">
                             <input type="checkbox" class="checkbox" 
                                    data-time="${task.duration}" 
-                                   data-category="${task.category}" />
+                                   data-category="${task.category || ''}" />
                             ${task.name}
                         </div>
                     `).join('')}
