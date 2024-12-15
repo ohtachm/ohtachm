@@ -6,110 +6,166 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
             line-height: 1.5;
-            font-size: 24px; /* 基本文字サイズ */
         }
         h1 {
-            font-size: 100px; /* タイトルの文字サイズ */
+            font-size: 80px;
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 30px;
+        }
+        .category-summary {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 40px;
+            background-color: #f4f4f4;
+            border-radius: 10px;
+        }
+        .category-item {
+            text-align: center;
+            flex-grow: 1;
         }
         .task-list {
             margin-bottom: 40px;
         }
         .task-time {
-            font-size: 80px; /* 時間の文字サイズ */
+            font-size: 60px;
             font-weight: bold;
             color: #333;
             margin-bottom: 20px;
         }
         .task-item {
-            font-size: 80px; /* タスク名の文字サイズ */
+            display: flex;
+            align-items: center;
+            font-size: 60px;
             margin-bottom: 15px;
+        }
+        .checkbox {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
         }
     </style>
 </head>
 <body>
     <h1>My Routine</h1>
+
+    <!-- 集計結果表示 -->
+    <div class="category-summary">
+        <div class="category-item" id="E">E: 0分</div>
+        <div class="category-item" id="S">S: 0分</div>
+        <div class="category-item" id="M">M: 0分</div>
+        <div class="category-item" id="L">L: 0分</div>
+        <div class="category-item" id="H">H: 0分</div>
+    </div>
+
+    <!-- タスクリスト -->
     <div id="routineList"></div>
+
     <script>
         const routine = [
             { time: '4:30', tasks: [
-                'ポットスイッチ→うがい→洗濯',
-                'ヨガ（10分）',
-                '英語（15分）',
-                '体重測定',
-                '身支度',
-                '白湯',
-                '記録・スケジュール（15分）',
-                '洗濯物干し（15分）',
+                { name: 'ポットスイッチ→うがい→洗濯', category: 'H', duration: 0 },
+                { name: 'ヨガ（10分）', category: 'S', duration: 10 },
+                { name: '英語（15分）', category: 'E', duration: 15 },
+                { name: '体重測定', category: '', duration: 0 },
+                { name: '身支度', category: '', duration: 0 },
+                { name: '白湯', category: '', duration: 0 },
+                { name: '記録・スケジュール（15分）', category: 'S', duration: 15 },
+                { name: '洗濯物干し（15分）', category: 'H', duration: 15 },
             ]},
             { time: '5:30', tasks: [
-                'コーヒー',
-                '読書（15分）',
-                '最重要タスク①（15分）',
-                '最重要タスク②（15分）',
+                { name: 'コーヒー', category: '', duration: 0 },
+                { name: '読書（15分）', category: 'S', duration: 15 },
+                { name: '最重要タスク①（15分）', category: 'S', duration: 15 },
+                { name: '最重要タスク②（15分）', category: 'S', duration: 15 },
             ]},
             { time: '6:00', tasks: [
-                '最重要タスク③（15分）',
-                '教材研究（15分）',
-                'Workplace（15分）',
-                'ウォーキング（15分）',
+                { name: '最重要タスク③（15分）', category: 'S', duration: 15 },
+                { name: '教材研究（15分）', category: 'S', duration: 15 },
+                { name: 'Workplace（15分）', category: 'S', duration: 15 },
+                { name: 'ウォーキング（15分）', category: 'S', duration: 15 },
             ]},
             { time: '7:30', tasks: [
-                '英語①（15分）',
-                '英語②（15分）',
-                '英単語（5分）',
+                { name: '英語①（15分）', category: 'E', duration: 15 },
+                { name: '英語②（15分）', category: 'E', duration: 15 },
+                { name: '英単語（5分）', category: 'E', duration: 5 },
             ]},
             { time: '15:50', tasks: [
-                '学級通信（20分）',
-                '教材研究（30分）',
-                '日記コメント（15分）',
+                { name: '学級通信（20分）', category: 'M', duration: 20 },
+                { name: '教材研究（30分）', category: 'S', duration: 30 },
+                { name: '日記コメント（15分）', category: 'M', duration: 15 },
             ]},
             { time: '17:30', tasks: [
-                '風呂スイッチ',
-                '掃除（5分）',
-                'スクワット（5分）',
-                'ヨーグルト・フルグラ（5分）',
-                '入浴・瞑想（15分）',
+                { name: '風呂スイッチ', category: '', duration: 0 },
+                { name: '掃除（5分）', category: 'H', duration: 5 },
+                { name: 'スクワット（5分）', category: 'S', duration: 5 },
+                { name: 'ヨーグルト・フルグラ（5分）', category: 'L', duration: 5 },
+                { name: '入浴・瞑想（15分）', category: 'S', duration: 15 },
             ]},
             { time: '18:15', tasks: [
-                'Workplace（30分）',
-                '新宝島動画分析（15分）',
-                '向国論文（15分）',
+                { name: 'Workplace（30分）', category: 'S', duration: 30 },
+                { name: '新宝島動画分析（15分）', category: 'S', duration: 15 },
+                { name: '向国論文（15分）', category: 'S', duration: 15 },
             ]},
             { time: '19:20', tasks: [
-                '日記コメント（15分）',
-                '手帳→英作文（15分）',
+                { name: '日記コメント（15分）', category: 'M', duration: 15 },
+                { name: '手帳→英作文（15分）', category: 'E', duration: 15 },
             ]},
             { time: '21:00', tasks: [
-                'Expressive Writing（15分）',
-                '読書（15分）',
+                { name: 'Expressive Writing（15分）', category: 'S', duration: 15 },
+                { name: '読書（15分）', category: 'S', duration: 15 },
             ]}
         ];
 
-        const routineList = document.getElementById('routineList');
+        const categories = ['E', 'S', 'M', 'L', 'H'];
+        const categorySummary = { 'E': 0, 'S': 0, 'M': 0, 'L': 0, 'H': 0 };
 
-        routine.forEach((timeBlock) => {
-            const timeDiv = document.createElement('div');
-            timeDiv.className = 'task-list';
-
-            const timeHeader = document.createElement('div');
-            timeHeader.className = 'task-time';
-            timeHeader.textContent = timeBlock.time;
-            timeDiv.appendChild(timeHeader);
-
-            timeBlock.tasks.forEach((task) => {
-                const taskItem = document.createElement('div');
-                taskItem.className = 'task-item';
-                taskItem.textContent = task;
-                timeDiv.appendChild(taskItem);
+        function updateCategorySummary() {
+            categories.forEach(category => {
+                const summaryElement = document.getElementById(category);
+                summaryElement.textContent = `${category}: ${categorySummary[category]}分`;
             });
+        }
 
-            routineList.appendChild(timeDiv);
-        });
+        function renderRoutine() {
+            const routineDiv = document.getElementById('routineList');
+            routineDiv.innerHTML = routine.map(timeBlock => `
+                <div class="task-list">
+                    <div class="task-time">${timeBlock.time}</div>
+                    ${timeBlock.tasks.map(task => `
+                        <div class="task-item">
+                            <input type="checkbox" class="checkbox" 
+                                   data-time="${task.duration}" 
+                                   data-category="${task.category}" />
+                            ${task.name}
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const time = parseInt(this.dataset.time) || 0;
+                    const category = this.dataset.category;
+                    if (category) {
+                        if (this.checked) {
+                            categorySummary[category] += time;
+                        } else {
+                            categorySummary[category] -= time;
+                        }
+                        updateCategorySummary();
+                    }
+                });
+            });
+        }
+
+        renderRoutine();
+        updateCategorySummary();
     </script>
 </body>
 </html>
