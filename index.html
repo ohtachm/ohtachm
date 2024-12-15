@@ -29,6 +29,29 @@
             text-align: center;
             flex-grow: 1;
         }
+        .form-container {
+            margin-bottom: 40px;
+            font-size: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .form-container select,
+        .form-container input,
+        .form-container button {
+            margin-right: 10px;
+            font-size: 30px;
+            padding: 5px;
+            flex-grow: 1;
+        }
+        .form-container button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            flex-grow: 0;
+        }
         .task-list {
             margin-bottom: 40px;
         }
@@ -60,22 +83,6 @@
         .task-item.completed {
             text-decoration: line-through;
             color: #007bff;
-        }
-        .form-container {
-            margin-bottom: 40px;
-            font-size: 30px;
-        }
-        .form-container select, .form-container input, .form-container button {
-            margin-right: 10px;
-            font-size: 30px;
-            padding: 5px;
-        }
-        .form-container button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
         }
     </style>
 </head>
