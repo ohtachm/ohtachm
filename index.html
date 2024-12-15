@@ -45,9 +45,23 @@
             margin-bottom: 15px;
         }
         .checkbox {
-            width: 40px;
-            height: 40px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid #007bff;
             margin-right: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .checkbox.checked {
+            background-color: #007bff;
+            color: white;
+        }
+        .task-item.completed {
+            text-decoration: line-through;
+            color: #007bff;
         }
     </style>
 </head>
@@ -139,21 +153,24 @@
                     <div class="task-time">${timeBlock.time}</div>
                     ${timeBlock.tasks.map(task => `
                         <div class="task-item">
-                            <input type="checkbox" class="checkbox" 
-                                   data-time="${task.duration}" 
-                                   data-category="${task.category || ''}" />
-                            ${task.name}
+                            <div class="checkbox" 
+                                 data-time="${task.duration}" 
+                                 data-category="${task.category || ''}"></div>
+                            <span>${task.name}</span>
                         </div>
                     `).join('')}
                 </div>
             `).join('');
 
             document.querySelectorAll('.checkbox').forEach(checkbox => {
-                checkbox.addEventListener('change', function() {
+                checkbox.addEventListener('click', function() {
+                    const taskItem = this.parentElement;
                     const time = parseInt(this.dataset.time) || 0;
                     const category = this.dataset.category;
+
+                    taskItem.classList.toggle('completed');
                     if (category) {
-                        if (this.checked) {
+                        if (taskItem.classList.contains('completed')) {
                             categorySummary[category] += time;
                         } else {
                             categorySummary[category] -= time;
