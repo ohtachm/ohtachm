@@ -9,112 +9,239 @@
             margin: 0;
             padding: 20px;
             line-height: 1.5;
-            font-size: 20px;
-            overflow-y: auto; /* スクロール可能にする */
+            font-size: 16px;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
             height: 100vh;
         }
         h1 {
-            font-size: 50px;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+        }
+        .summary-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+        .summary-column {
+            flex: 1;
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .input-container {
+            background-color: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 10px;
+        }
+        .routine-list {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-right: 10px;
         }
         .task-list {
-            margin-bottom: 40px;
+            background-color: white;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 15px;
         }
         .task-time {
-            font-size: 30px;
+            font-size: 18px;
             font-weight: bold;
             color: #333;
             margin-bottom: 10px;
         }
         .task-item {
-            font-size: 20px;
+            display: flex;
+            align-items: center;
             margin-bottom: 5px;
-        }
-        .checkbox {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: 2px solid #87ceeb;
-            margin-right: 10px;
-            position: relative;
-            cursor: pointer;
-        }
-        .checkbox.checked::after {
-            content: '✓';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #87ceeb;
-            font-size: 14px;
         }
         .task-item.completed {
             text-decoration: line-through;
+            color: #888;
+        }
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #87ceeb;
+            border-radius: 50%;
+            margin-right: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .checkbox.checked::after {
+            content: '✓';
             color: #87ceeb;
+            font-size: 14px;
+        }
+        input, select, button {
+            padding: 5px;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
     <h1>My Routine</h1>
-    <div id="routineList"></div>
+    
+    <div class="container">
+        <div class="summary-container">
+            <div class="summary-column" id="eColumn">
+                <h3>E</h3>
+                <div id="eSummary">0 分</div>
+            </div>
+            <div class="summary-column" id="sColumn">
+                <h3>S</h3>
+                <div id="sSummary">0 分</div>
+            </div>
+            <div class="summary-column" id="mColumn">
+                <h3>M</h3>
+                <div id="mSummary">0 分</div>
+            </div>
+            <div class="summary-column" id="lColumn">
+                <h3>L</h3>
+                <div id="lSummary">0 分</div>
+            </div>
+            <div class="summary-column" id="hColumn">
+                <h3>H</h3>
+                <div id="hSummary">0 分</div>
+            </div>
+        </div>
+
+        <div class="input-container">
+            <select id="categorySelect">
+                <option value="E">E</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="H">H</option>
+            </select>
+            
+            <input type="text" id="taskInput" placeholder="タスク名">
+            
+            <select id="timeSelect">
+                <option value="5">5分</option>
+                <option value="10">10分</option>
+                <option value="15">15分</option>
+                <option value="20">20分</option>
+                <option value="30">30分</option>
+            </select>
+            
+            <button onclick="addTask()">追加</button>
+        </div>
+
+        <div class="routine-list" id="routineList"></div>
+    </div>
 
     <script>
-        const routine = [
+        let routine = [
             { time: '4:30', tasks: [
-                { name: 'ポットスイッチ→うがい→洗濯', completed: false },
-                { name: 'ヨガ（10分）', completed: false },
-                { name: '英語（15分）', completed: false },
-                { name: '体重測定', completed: false },
-                { name: '身支度', completed: false },
-                { name: '白湯', completed: false },
-                { name: '記録・スケジュール（15分）', completed: false },
-                { name: '洗濯物干し（15分）', completed: false }
+                { name: 'ポットスイッチ→うがい→洗濯', category: 'H', completed: false, time: 5 },
+                { name: 'ヨガ（10分）', category: 'S', completed: false, time: 10 },
+                { name: '英語（15分）', category: 'E', completed: false, time: 15 },
+                { name: '体重測定', category: 'S', completed: false, time: 5 },
+                { name: '身支度', category: 'S', completed: false, time: 5 },
+                { name: '白湯', category: 'S', completed: false, time: 5 },
+                { name: '記録・スケジュール（15分）', category: 'S', completed: false, time: 15 },
+                { name: '洗濯物干し（15分）', category: 'H', completed: false, time: 15 }
             ]},
             { time: '5:30', tasks: [
-                { name: 'コーヒー', completed: false },
-                { name: '読書（15分）', completed: false },
-                { name: '最重要タスク①（15分）', completed: false },
-                { name: '最重要タスク②（15分）', completed: false }
+                { name: 'コーヒー', category: 'S', completed: false, time: 5 },
+                { name: '読書（15分）', category: 'S', completed: false, time: 15 },
+                { name: '最重要タスク①（15分）', category: 'S', completed: false, time: 15 },
+                { name: '最重要タスク②（15分）', category: 'S', completed: false, time: 15 }
             ]},
             { time: '6:00', tasks: [
-                { name: '最重要タスク③（15分）', completed: false },
-                { name: '教材研究（15分）', completed: false },
-                { name: 'Workplace（15分）', completed: false },
-                { name: 'ウォーキング（15分）', completed: false }
+                { name: '最重要タスク③（15分）', category: 'S', completed: false, time: 15 },
+                { name: '教材研究（15分）', category: 'S', completed: false, time: 15 },
+                { name: 'Workplace（15分）', category: 'S', completed: false, time: 15 },
+                { name: 'ウォーキング（15分）', category: 'S', completed: false, time: 15 }
             ]},
             { time: '7:30', tasks: [
-                { name: '英語①（15分）', completed: false },
-                { name: '英語②（15分）', completed: false },
-                { name: '英単語（5分）', completed: false }
+                { name: '英語①（15分）', category: 'E', completed: false, time: 15 },
+                { name: '英語②（15分）', category: 'E', completed: false, time: 15 },
+                { name: '英単語（5分）', category: 'E', completed: false, time: 5 }
             ]},
             { time: '15:50', tasks: [
-                { name: '学級通信（20分）', completed: false },
-                { name: '教材研究（30分）', completed: false },
-                { name: '日記コメント（15分）', completed: false }
+                { name: '学級通信（20分）', category: 'E', completed: false, time: 20 },
+                { name: '教材研究（30分）', category: 'S', completed: false, time: 30 },
+                { name: '日記コメント（15分）', category: 'M', completed: false, time: 15 }
             ]},
             { time: '17:30', tasks: [
-                { name: '風呂スイッチ', completed: false },
-                { name: '掃除（5分）', completed: false },
-                { name: 'スクワット（5分）', completed: false },
-                { name: 'ヨーグルト・フルグラ（5分）', completed: false },
-                { name: '入浴・瞑想（15分）', completed: false }
+                { name: '風呂スイッチ', category: 'H', completed: false, time: 5 },
+                { name: '掃除（5分）', category: 'H', completed: false, time: 5 },
+                { name: 'スクワット（5分）', category: 'S', completed: false, time: 5 },
+                { name: 'ヨーグルト・フルグラ（5分）', category: 'L', completed: false, time: 5 },
+                { name: '入浴・瞑想（15分）', category: 'S', completed: false, time: 15 }
             ]},
             { time: '18:15', tasks: [
-                { name: 'Workplace（30分）', completed: false },
-                { name: '新宝島動画分析（15分）', completed: false },
-                { name: '向国論文（15分）', completed: false }
+                { name: 'Workplace（30分）', category: 'S', completed: false, time: 30 },
+                { name: '新宝島動画分析（15分）', category: 'S', completed: false, time: 15 },
+                { name: '向国論文（15分）', category: 'S', completed: false, time: 15 }
             ]},
             { time: '19:20', tasks: [
-                { name: '日記コメント（15分）', completed: false },
-                { name: '手帳→英作文（15分）', completed: false }
+                { name: '日記コメント（15分）', category: 'M', completed: false, time: 15 },
+                { name: '手帳→英作文（15分）', category: 'E', completed: false, time: 15 }
             ]},
             { time: '21:00', tasks: [
-                { name: 'Expressive Writing（15分）', completed: false },
-                { name: '読書（15分）', completed: false }
+                { name: 'Expressive Writing（15分）', category: 'S', completed: false, time: 15 },
+                { name: '読書（15分）', category: 'S', completed: false, time: 15 }
             ]}
         ];
+
+        // 具体的なカテゴリーリストを定義
+        const categoryLists = {
+            'E': ['英語①', '英語②', '手帳→英作文'],
+            'S': ['英語①', '英語②', '手帳→英作文', 'ヨガ', '記録・スケジュール', '読書', '最重要タスク①', '最重要タスク②', '最重要タスク③', '教材研究', 'Workplace', 'ウォーキング', 'スクワット', '入浴・瞑想', '新宝島動画分析', '向国論文', 'Expressive Writing'],
+            'M': ['日記コメント'],
+            'L': ['ヨーグルト・フルグラ'],
+            'H': ['洗濯物干し', '掃除']
+        };
+
+        function calculateCompletedCategoryTime() {
+            const summary = { 'E': 0, 'S': 0, 'M': 0, 'L': 0, 'H': 0 };
+            
+            routine.forEach(block => {
+                block.tasks.forEach(task => {
+                    if (task.completed) {
+                        // 各カテゴリーのリストと照合
+                        for (let category in categoryLists) {
+                            if (categoryLists[category].some(item => task.name.includes(item))) {
+                                summary[category] += task.time;
+                                break;
+                            }
+                        }
+                    }
+                });
+            });
+            
+            return summary;
+        }
+
+        function renderSummary() {
+            const categorySummary = calculateCompletedCategoryTime();
+            
+            ['E', 'S', 'M', 'L', 'H'].forEach(cat => {
+                document.getElementById(`${cat.toLowerCase()}Summary`).textContent = 
+                    `${categorySummary[cat]} 分`;
+            });
+        }
 
         function renderRoutine() {
             const routineDiv = document.getElementById('routineList');
@@ -123,8 +250,8 @@
                     <div class="task-time">${timeBlock.time}</div>
                     ${timeBlock.tasks.map(task => `
                         <div class="task-item ${task.completed ? 'completed' : ''}">
-                            <span class="checkbox ${task.completed ? 'checked' : ''}" 
-                                  onclick="toggleTask('${timeBlock.time}', '${task.name}')"></span>
+                            <div class="checkbox ${task.completed ? 'checked' : ''}" 
+                                 onclick="toggleTask(this)"></div>
                             <span>${task.name}</span>
                         </div>
                     `).join('')}
@@ -132,13 +259,55 @@
             `).join('');
         }
 
-        function toggleTask(time, taskName) {
-            const timeBlock = routine.find(block => block.time === time);
-            const task = timeBlock.tasks.find(t => t.name === taskName);
-            task.completed = !task.completed;
-            renderRoutine();
+        function addTask() {
+            const categorySelect = document.getElementById('categorySelect');
+            const taskInput = document.getElementById('taskInput');
+            const timeSelect = document.getElementById('timeSelect');
+            
+            const category = categorySelect.value;
+            const taskName = taskInput.value.trim();
+            const time = timeSelect.value;
+            
+            if (taskName) {
+                const fullTaskName = `${taskName}（${time}分）`;
+                
+                routine.push({
+                    time: '未設定',
+                    tasks: [{ 
+                        name: fullTaskName, 
+                        category: category, 
+                        completed: false,
+                        time: parseInt(time)
+                    }]
+                });
+                
+                taskInput.value = '';
+                timeSelect.value = '5';
+                
+                renderRoutine();
+                renderSummary();
+            }
         }
 
+        function toggleTask(checkboxElement) {
+            const taskItem = checkboxElement.closest('.task-item');
+            checkboxElement.classList.toggle('checked');
+            taskItem.classList.toggle('completed');
+            
+            const taskName = taskItem.querySelector('span').textContent;
+            routine.forEach(block => {
+                block.tasks.forEach(task => {
+                    if (task.name === taskName) {
+                        task.completed = !task.completed;
+                    }
+                });
+            });
+            
+            renderSummary();
+        }
+
+        // Initialize
+        renderSummary();
         renderRoutine();
     </script>
 </body>
