@@ -14,7 +14,7 @@
             height: 100vh;
         }
         h1 {
-            font-size: 80px; /* タイトルサイズ */
+            font-size: 80px;
             text-align: center;
             margin-bottom: 30px;
         }
@@ -114,7 +114,13 @@
         </select>
         <input type="text" id="taskName" placeholder="タスク名を入力" />
         <select id="duration">
-            ${Array.from({ length: 12 }, (_, i) => `<option value="${(i + 1) * 5}">${(i + 1) * 5}分</option>`).join('')}
+            <option value="5">5分</option>
+            <option value="10">10分</option>
+            <option value="15">15分</option>
+            <option value="20">20分</option>
+            <option value="30">30分</option>
+            <option value="45">45分</option>
+            <option value="60">60分</option>
         </select>
         <button id="addTask">＋</button>
     </div>
@@ -133,6 +139,48 @@
                 { name: '白湯' },
                 { name: '記録・スケジュール', category: 'S', duration: 15 },
                 { name: '洗濯物干し', category: 'H', duration: 15 },
+            ]},
+            { time: '5:30', tasks: [
+                { name: 'コーヒー' },
+                { name: '読書', category: 'S', duration: 15 },
+                { name: '最重要タスク①', category: 'S', duration: 15 },
+                { name: '最重要タスク②', category: 'S', duration: 15 },
+            ]},
+            { time: '6:00', tasks: [
+                { name: '最重要タスク③', category: 'S', duration: 15 },
+                { name: '教材研究', category: 'S', duration: 15 },
+                { name: 'Workplace', category: 'S', duration: 15 },
+                { name: 'ウォーキング', category: 'S', duration: 15 },
+            ]},
+            { time: '7:30', tasks: [
+                { name: '英語①', category: 'E', duration: 15 },
+                { name: '英語②', category: 'E', duration: 15 },
+                { name: '英単語', duration: 5 },
+            ]},
+            { time: '15:50', tasks: [
+                { name: '学級通信', duration: 20 },
+                { name: '教材研究', category: 'S', duration: 30 },
+                { name: '日記コメント', category: 'M', duration: 15 },
+            ]},
+            { time: '17:30', tasks: [
+                { name: '風呂スイッチ' },
+                { name: '掃除', category: 'H', duration: 5 },
+                { name: 'スクワット', category: 'S', duration: 5 },
+                { name: 'ヨーグルト・フルグラ', category: 'L', duration: 5 },
+                { name: '入浴・瞑想', category: 'S', duration: 15 },
+            ]},
+            { time: '18:15', tasks: [
+                { name: 'Workplace', category: 'S', duration: 30 },
+                { name: '新宝島動画分析', category: 'S', duration: 15 },
+                { name: '向国論文', category: 'S', duration: 15 },
+            ]},
+            { time: '19:20', tasks: [
+                { name: '日記コメント', category: 'M', duration: 15 },
+                { name: '手帳→英作文', category: 'E', duration: 15 },
+            ]},
+            { time: '21:00', tasks: [
+                { name: 'Expressive Writing', category: 'S', duration: 15 },
+                { name: '読書', category: 'S', duration: 15 },
             ]}
         ];
 
