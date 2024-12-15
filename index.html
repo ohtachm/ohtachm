@@ -13,7 +13,7 @@
             overflow-y: scroll; /* 縦スクロールを有効にする */
         }
         h1 {
-            font-size: 80px; /* タイトルサイズを10px減らす */
+            font-size: 80px; /* タイトルサイズ */
             text-align: center;
             margin-bottom: 30px;
         }
@@ -22,7 +22,7 @@
             justify-content: space-between;
             padding: 15px;
             margin-bottom: 20px;
-            font-size: 40px; /* 集計セクションのフォントサイズを10px減少 */
+            font-size: 40px;
             background-color: #f4f4f4;
             border-radius: 10px;
         }
@@ -30,11 +30,31 @@
             text-align: center;
             flex-grow: 1;
         }
+        .form-container {
+            margin-bottom: 20px;
+            font-size: 40px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .form-container select,
+        .form-container input,
+        .form-container button {
+            font-size: 30px;
+            padding: 10px;
+        }
+        .form-container button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
         .task-list {
             margin-bottom: 40px;
         }
         .task-time {
-            font-size: 60px; /* 時間のフォントサイズを10px減少 */
+            font-size: 60px;
             font-weight: bold;
             color: #333;
             margin-bottom: 20px;
@@ -42,28 +62,24 @@
         .task-item {
             display: flex;
             align-items: center;
-            font-size: 40px; /* リストのフォントサイズを10px減少 */
+            font-size: 40px;
             margin-bottom: 15px;
         }
         .checkbox {
-            width: 60px; /* チェックボックスサイズを10px減少 */
+            width: 60px;
             height: 60px;
             border-radius: 50%;
             border: 3px solid #87ceeb; /* 水色のライン */
-            background-color: white; /* 中を白く塗りつぶす */
+            background-color: white; /* 白で塗りつぶし */
             margin-right: 15px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
-        .checkbox.checked {
-            background-color: #87ceeb;
-            color: white;
+        .task-item.completed .checkbox {
+            background-color: white; /* チェック済みでも白 */
         }
-        .task-item.completed {
+        .task-item.completed span {
             text-decoration: line-through;
-            color: #87ceeb;
+            color: #87ceeb; /* 水色のライン */
         }
     </style>
 </head>
@@ -77,6 +93,22 @@
         <div class="category-item" id="M">M: 0分</div>
         <div class="category-item" id="L">L: 0分</div>
         <div class="category-item" id="H">H: 0分</div>
+    </div>
+
+    <!-- タスク追加フォーム -->
+    <div class="form-container">
+        <select id="category">
+            <option value="E">E</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="H">H</option>
+        </select>
+        <input type="text" id="taskName" placeholder="タスク名を入力" />
+        <select id="duration">
+            ${Array.from({ length: 12 }, (_, i) => `<option value="${(i + 1) * 5}">${(i + 1) * 5}分</option>`).join('')}
+        </select>
+        <button id="addTask">＋</button>
     </div>
 
     <!-- タスクリスト -->
@@ -94,48 +126,7 @@
                 { name: '記録・スケジュール', category: 'S', duration: 15 },
                 { name: '洗濯物干し', category: 'H', duration: 15 },
             ]},
-            { time: '5:30', tasks: [
-                { name: 'コーヒー' },
-                { name: '読書', category: 'S', duration: 15 },
-                { name: '最重要タスク①', category: 'S', duration: 15 },
-                { name: '最重要タスク②', category: 'S', duration: 15 },
-            ]},
-            { time: '6:00', tasks: [
-                { name: '最重要タスク③', category: 'S', duration: 15 },
-                { name: '教材研究', category: 'S', duration: 15 },
-                { name: 'Workplace', category: 'S', duration: 15 },
-                { name: 'ウォーキング', category: 'S', duration: 15 },
-            ]},
-            { time: '7:30', tasks: [
-                { name: '英語①', category: 'E', duration: 15 },
-                { name: '英語②', category: 'E', duration: 15 },
-                { name: '英単語', duration: 5 },
-            ]},
-            { time: '15:50', tasks: [
-                { name: '学級通信', duration: 20 },
-                { name: '教材研究', category: 'S', duration: 30 },
-                { name: '日記コメント', category: 'M', duration: 15 },
-            ]},
-            { time: '17:30', tasks: [
-                { name: '風呂スイッチ' },
-                { name: '掃除', category: 'H', duration: 5 },
-                { name: 'スクワット', category: 'S', duration: 5 },
-                { name: 'ヨーグルト・フルグラ', category: 'L', duration: 5 },
-                { name: '入浴・瞑想', category: 'S', duration: 15 },
-            ]},
-            { time: '18:15', tasks: [
-                { name: 'Workplace', category: 'S', duration: 30 },
-                { name: '新宝島動画分析', category: 'S', duration: 15 },
-                { name: '向国論文', category: 'S', duration: 15 },
-            ]},
-            { time: '19:20', tasks: [
-                { name: '日記コメント', category: 'M', duration: 15 },
-                { name: '手帳→英作文', category: 'E', duration: 15 },
-            ]},
-            { time: '21:00', tasks: [
-                { name: 'Expressive Writing', category: 'S', duration: 15 },
-                { name: '読書', category: 'S', duration: 15 },
-            ]}
+            // 他の時間帯のタスクも追加可能
         ];
 
         const categories = ['E', 'S', 'M', 'L', 'H'];
@@ -155,36 +146,31 @@
                     <div class="task-time">${timeBlock.time}</div>
                     ${timeBlock.tasks.map(task => `
                         <div class="task-item ${task.completed ? 'completed' : ''}">
-                            <div class="checkbox ${task.completed ? 'checked' : ''}" 
-                                 data-category="${task.category || ''}" 
-                                 data-duration="${task.duration || 0}"></div>
+                            <div class="checkbox"></div>
                             <span>${task.name}${task.duration ? ` (${task.duration}分)` : ''}</span>
                         </div>
                     `).join('')}
                 </div>
             `).join('');
-
-            document.querySelectorAll('.checkbox').forEach(checkbox => {
-                checkbox.addEventListener('click', function() {
-                    const category = this.dataset.category;
-                    const duration = parseInt(this.dataset.duration) || 0;
-
-                    if (category) {
-                        const taskItem = this.parentElement;
-                        taskItem.classList.toggle('completed');
-                        if (taskItem.classList.contains('completed')) {
-                            categorySummary[category] += duration;
-                        } else {
-                            categorySummary[category] -= duration;
-                        }
-                        updateCategorySummary();
-                    }
-                });
-            });
         }
 
-        renderRoutine();
+        document.getElementById('addTask').addEventListener('click', () => {
+            const category = document.getElementById('category').value;
+            const name = document.getElementById('taskName').value.trim();
+            const duration = parseInt(document.getElementById('duration').value);
+
+            if (name && duration) {
+                routine.push({ time: '追加されたタスク', tasks: [{ name, category, duration, completed: true }] });
+                categorySummary[category] += duration;
+                updateCategorySummary();
+                renderRoutine();
+                document.getElementById('taskName').value = ''; // フォームをリセット
+                document.getElementById('duration').value = '5';
+            }
+        });
+
         updateCategorySummary();
+        renderRoutine();
     </script>
 </body>
 </html>
