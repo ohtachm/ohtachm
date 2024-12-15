@@ -1,197 +1,142 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <title>My Routine</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            line-height: 1.6;
-        }
-        .category-summary {
-            display: flex;
-            justify-content: space-between;
-            background-color: #f4f4f4;
-            padding: 10px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-        }
-        .category-item {
-            text-align: center;
-            flex-grow: 1;
-        }
-        .task-list {
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
-        }
-        .task-time {
-            font-weight: bold;
-            color: #333;
-            display: block;
-            margin-bottom: 10px;
-        }
-        .task-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-        .task-category {
-            margin-left: 5px;
-            padding: 2px 5px;
-            border-radius: 3px;
-        }
-        .checkbox {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: 2px solid #007bff;
-            margin-right: 5px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .checkbox.checked {
-            background-color: #007bff;
-            position: relative;
-        }
-        .checkbox.checked::after {
-            content: '✓';
-            color: white;
-            font-size: 12px;
-        }
-        .E { background-color: #e6f2ff; }
-        .S { background-color: #e6ffe6; }
-        .M { background-color: #fff2e6; }
-        .L { background-color: #f2e6ff; }
-        .H { background-color: #ffe6e6; }
-    </style>
-</head>
-<body>
-    <h1>My Routine</h1>
+import React, { useState, useMemo } from 'react';
+import { CheckCircle, Circle, Plus } from 'lucide-react';
 
-    <div class="category-summary">
-        <div class="category-item" id="E">E: 0分</div>
-        <div class="category-item" id="S">S: 0分</div>
-        <div class="category-item" id="M">M: 0分</div>
-        <div class="category-item" id="L">L: 0分</div>
-        <div class="category-item" id="H">H: 0分</div>
+const TodoApp = () => {
+  const [schedule, setSchedule] = useState([
+    {
+      time: "4:00",
+      tasks: [
+        { id: '1', text: 'ポットスイッチ', completed: false },
+        { id: '2', text: 'うがい', completed: false },
+        { id: '3', text: '洗濯', completed: false },
+        { id: '4', text: 'ヨガ（10分）', completed: false, category: 'S', duration: 10 },
+        { id: '5', text: '体重測定', completed: false },
+      ]
+    },
+    {
+      time: "5:00",
+      tasks: [
+        { id: 'a', text: 'コーヒー', completed: false },
+        { id: 'b', text: '読書（15分）', completed: false, category: 'S', duration: 15 },
+      ]
+    }
+  ]);
+
+  const [customTasks, setCustomTasks] = useState({
+    E: [],
+    S: [],
+    M: [],
+    L: [],
+    H: []
+  });
+
+  const [newTask, setNewTask] = useState({
+    category: 'E',
+    text: '',
+    duration: 5
+  });
+
+  const toggleTask = (timeIndex, taskId) => {
+    const newSchedule = [...schedule];
+    const task = newSchedule[timeIndex].tasks.find(t => t.id === taskId);
+    if (task) task.completed = !task.completed;
+    setSchedule(newSchedule);
+  };
+
+  const resetTasks = () => {
+    setSchedule(schedule.map(timeBlock => ({
+      ...timeBlock,
+      tasks: timeBlock.tasks.map(task => ({ ...task, completed: false }))
+    })));
+    setCustomTasks({
+      E: [],
+      S: [],
+      M: [],
+      L: [],
+      H: []
+    });
+  };
+
+  const addCustomTask = () => {
+    if (newTask.text && newTask.duration) {
+      const newEntry = {
+        text: `${newTask.text}（${newTask.duration}分）`,
+        completed: false,
+        category: newTask.category,
+        duration: parseInt(newTask.duration),
+      };
+      setCustomTasks(prev => ({
+        ...prev,
+        [newTask.category]: [...prev[newTask.category], newEntry],
+      }));
+      setNewTask({ category: 'E', text: '', duration: 5 });
+    }
+  };
+
+  return (
+    <div className="max-w-sm mx-auto bg-gray-50 shadow-lg rounded-xl p-4 mt-4">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold text-blue-800">My Routine</h1>
+        <button onClick={resetTasks} className="text-blue-600 hover:text-blue-800">
+          リセット
+        </button>
+      </div>
+      {schedule.map((block, index) => (
+        <div key={block.time} className="mb-4">
+          <h2 className="text-lg font-semibold text-gray-800 mb-2">{block.time}</h2>
+          {block.tasks.map(task => (
+            <div
+              key={task.id}
+              className="flex items-center mb-2 p-2 bg-white rounded-lg shadow-sm cursor-pointer"
+              onClick={() => toggleTask(index, task.id)}
+            >
+              {task.completed ? (
+                <CheckCircle color="green" size={24} />
+              ) : (
+                <Circle color="gray" size={24} />
+              )}
+              <span className={`ml-4 text-lg ${task.completed ? 'line-through text-gray-400' : 'text-gray-800'}`}>
+                {task.text}
+              </span>
+            </div>
+          ))}
+        </div>
+      ))}
+      <div className="mt-4 p-4 bg-white shadow-md rounded-lg">
+        <h3 className="text-lg font-semibold text-gray-800 mb-2">タスクを追加</h3>
+        <div className="flex space-x-2">
+          <select
+            value={newTask.category}
+            onChange={(e) => setNewTask({ ...newTask, category: e.target.value })}
+            className="border rounded-lg px-2 py-1 flex-shrink-0"
+          >
+            {['E', 'S', 'M', 'L', 'H'].map(cat => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+          <input
+            type="text"
+            value={newTask.text}
+            placeholder="タスク名"
+            onChange={(e) => setNewTask({ ...newTask, text: e.target.value })}
+            className="flex-grow border rounded-lg px-2 py-1"
+          />
+          <input
+            type="number"
+            value={newTask.duration}
+            placeholder="分"
+            onChange={(e) => setNewTask({ ...newTask, duration: e.target.value })}
+            className="w-20 border rounded-lg px-2 py-1 flex-shrink-0"
+          />
+          <button onClick={addCustomTask} className="bg-blue-500 text-white rounded-lg px-3 py-1">
+            <Plus size={20} />
+          </button>
+        </div>
+      </div>
     </div>
+  );
+};
 
-    <div id="routineList"></div>
-
-    <script>
-        const routine = [
-            { time: '4:30', tasks: [
-                { name: 'ポットスイッチ→うがい→洗濯', category: 'H', duration: 0 },
-                { name: 'ヨガ（10分）', category: 'S', duration: 10 },
-                { name: '英語（15分）', category: 'E', duration: 15 },
-                { name: '体重測定', category: '', duration: 0 },
-                { name: '身支度', category: '', duration: 0 },
-                { name: '白湯', category: '', duration: 0 },
-                { name: '記録・スケジュール（15分）', category: 'S', duration: 15 },
-                { name: '洗濯物干し（15分）', category: 'H', duration: 15 }
-            ]},
-            { time: '5:30', tasks: [
-                { name: 'コーヒー', category: '', duration: 0 },
-                { name: '読書（15分）', category: 'S', duration: 15 },
-                { name: '最重要タスク①（15分）', category: 'S', duration: 15 },
-                { name: '最重要タスク②（15分）', category: 'S', duration: 15 }
-            ]},
-            { time: '6:00', tasks: [
-                { name: '最重要タスク③（15分）', category: 'S', duration: 15 },
-                { name: '教材研究（15分）', category: 'S', duration: 15 },
-                { name: 'Workplace（15分）', category: 'S', duration: 15 },
-                { name: 'ウォーキング（15分）', category: 'S', duration: 15 }
-            ]},
-            { time: '7:30', tasks: [
-                { name: '英語①（15分）', category: 'E', duration: 15 },
-                { name: '英語②（15分）', category: 'E', duration: 15 },
-                { name: '英単語（5分）', category: '', duration: 5 }
-            ]},
-            { time: '15:50', tasks: [
-                { name: '学級通信（20分）', category: '', duration: 20 },
-                { name: '教材研究（30分）', category: 'S', duration: 30 },
-                { name: '日記コメント（15分）', category: 'M', duration: 15 }
-            ]},
-            { time: '17:30', tasks: [
-                { name: '風呂スイッチ', category: '', duration: 0 },
-                { name: '掃除（5分）', category: 'H', duration: 5 },
-                { name: 'スクワット（5分）', category: 'S', duration: 5 },
-                { name: 'ヨーグルト・フルグラ（5分）', category: 'L', duration: 5 },
-                { name: '入浴・瞑想（15分）', category: 'S', duration: 15 }
-            ]},
-            { time: '18:15', tasks: [
-                { name: 'Workplace（30分）', category: 'S', duration: 30 },
-                { name: '新宝島動画分析（15分）', category: 'S', duration: 15 },
-                { name: '向国論文（15分）', category: 'S', duration: 15 }
-            ]},
-            { time: '19:20', tasks: [
-                { name: '日記コメント（15分）', category: 'M', duration: 15 },
-                { name: '手帳→英作文（15分）', category: 'E', duration: 15 }
-            ]},
-            { time: '21:00', tasks: [
-                { name: 'Expressive Writing（15分）', category: 'S', duration: 15 },
-                { name: '読書（15分）', category: 'S', duration: 15 }
-            ]}
-        ];
-
-        const categories = ['E', 'S', 'M', 'L', 'H'];
-        const categorySummary = {
-            'E': 0,
-            'S': 0,
-            'M': 0,
-            'L': 0,
-            'H': 0
-        };
-
-        function updateCategorySummary() {
-            categories.forEach(category => {
-                const summaryElement = document.getElementById(category);
-                summaryElement.textContent = `${category}: ${categorySummary[category]}分`;
-            });
-        }
-
-        function renderRoutine() {
-            const routineDiv = document.getElementById('routineList');
-            routineDiv.innerHTML = routine.map(timeBlock => `
-                <div class="task-list">
-                    <span class="task-time">${timeBlock.time}</span>
-                    ${timeBlock.tasks.map(task => `
-                        <div class="task-item">
-                            <div class="checkbox" data-time="${task.duration}" data-category="${task.category}"></div>
-                            <span class="task-category ${task.category}">${task.name}</span>
-                        </div>
-                    `).join('')}
-                </div>
-            `).join('');
-
-            // Add event listeners to checkboxes
-            document.querySelectorAll('.checkbox').forEach(checkbox => {
-                checkbox.addEventListener('click', function() {
-                    this.classList.toggle('checked');
-                    
-                    const time = parseInt(this.dataset.time);
-                    const category = this.dataset.category;
-
-                    if (this.classList.contains('checked') && category) {
-                        categorySummary[category] += time;
-                    } else if (category) {
-                        categorySummary[category] -= time;
-                    }
-
-                    updateCategorySummary();
-                });
-            });
-        }
-
-        // Initialize
-        renderRoutine();
-        updateCategorySummary();
-    </script>
-</body>
-</html>
+export default TodoApp;
