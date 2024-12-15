@@ -10,130 +10,110 @@ const TodoApp = () => {
         { id: '2', text: 'うがい', completed: false },
         { id: '3', text: '洗濯', completed: false },
         { id: '4', text: 'ヨガ（10分）', completed: false, category: 'S', duration: 10 },
-        { id: '5', text: '体重測定', completed: false },
-      ]
+      ],
     },
     {
       time: "5:00",
       tasks: [
         { id: 'a', text: 'コーヒー', completed: false },
         { id: 'b', text: '読書（15分）', completed: false, category: 'S', duration: 15 },
-      ]
-    }
+      ],
+    },
   ]);
 
-  const [customTasks, setCustomTasks] = useState({
-    E: [],
-    S: [],
-    M: [],
-    L: [],
-    H: []
-  });
-
-  const [newTask, setNewTask] = useState({
-    category: 'E',
-    text: '',
-    duration: 5
-  });
+  const [newTask, setNewTask] = useState({ category: 'E', text: '', duration: 5 });
 
   const toggleTask = (timeIndex, taskId) => {
-    const newSchedule = [...schedule];
-    const task = newSchedule[timeIndex].tasks.find(t => t.id === taskId);
+    const updatedSchedule = [...schedule];
+    const task = updatedSchedule[timeIndex].tasks.find((t) => t.id === taskId);
     if (task) task.completed = !task.completed;
-    setSchedule(newSchedule);
+    setSchedule(updatedSchedule);
   };
 
   const resetTasks = () => {
-    setSchedule(schedule.map(timeBlock => ({
+    setSchedule(schedule.map((timeBlock) => ({
       ...timeBlock,
-      tasks: timeBlock.tasks.map(task => ({ ...task, completed: false }))
+      tasks: timeBlock.tasks.map((task) => ({ ...task, completed: false })),
     })));
-    setCustomTasks({
-      E: [],
-      S: [],
-      M: [],
-      L: [],
-      H: []
-    });
   };
 
-  const addCustomTask = () => {
-    if (newTask.text && newTask.duration) {
-      const newEntry = {
-        text: `${newTask.text}（${newTask.duration}分）`,
-        completed: false,
-        category: newTask.category,
-        duration: parseInt(newTask.duration),
-      };
-      setCustomTasks(prev => ({
+  const addTask = () => {
+    if (newTask.text.trim() && newTask.duration) {
+      setSchedule((prev) => [
         ...prev,
-        [newTask.category]: [...prev[newTask.category], newEntry],
-      }));
+        {
+          time: "新しい時間",
+          tasks: [
+            {
+              id: Math.random().toString(36).substring(7),
+              text: `${newTask.text}（${newTask.duration}分）`,
+              completed: false,
+              category: newTask.category,
+              duration: newTask.duration,
+            },
+          ],
+        },
+      ]);
       setNewTask({ category: 'E', text: '', duration: 5 });
     }
   };
 
   return (
-    <div className="max-w-sm mx-auto bg-gray-50 shadow-lg rounded-xl p-6 mt-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-4xl font-bold text-blue-800">My Routine</h1>
-        <button onClick={resetTasks} className="text-blue-600 hover:text-blue-800 text-xl">
+    <div className="max-w-sm mx-auto bg-gray-100 p-6 rounded-lg shadow-lg space-y-4">
+      <div className="text-center">
+        <h1 className="text-3xl font-bold text-blue-700">My Routine</h1>
+        <button
+          onClick={resetTasks}
+          className="text-lg text-red-500 hover:text-red-700 mt-4"
+        >
           リセット
         </button>
       </div>
-      {schedule.map((block, index) => (
-        <div key={block.time} className="mb-6">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">{block.time}</h2>
-          {block.tasks.map(task => (
+
+      {schedule.map((timeBlock, index) => (
+        <div key={timeBlock.time} className="bg-white p-4 rounded-lg shadow-md space-y-2">
+          <h2 className="text-xl font-semibold text-gray-800">{timeBlock.time}</h2>
+          {timeBlock.tasks.map((task) => (
             <div
               key={task.id}
-              className="flex items-center mb-3 p-3 bg-white rounded-lg shadow-md cursor-pointer"
+              className="flex items-center p-2 bg-gray-50 rounded-lg shadow-sm cursor-pointer"
               onClick={() => toggleTask(index, task.id)}
             >
               {task.completed ? (
-                <CheckCircle color="green" size={28} />
+                <CheckCircle color="green" size={24} />
               ) : (
-                <Circle color="gray" size={28} />
+                <Circle color="gray" size={24} />
               )}
-              <span className={`ml-4 text-2xl ${task.completed ? 'line-through text-gray-400' : 'text-gray-800'}`}>
+              <span className={`ml-4 text-lg ${task.completed ? 'line-through text-gray-400' : 'text-gray-800'}`}>
                 {task.text}
               </span>
             </div>
           ))}
         </div>
       ))}
-      <div className="p-6 bg-white shadow-md rounded-lg">
-        <h3 className="text-2xl font-semibold text-gray-800 mb-4">タスクを追加</h3>
-        <div className="flex flex-col space-y-4">
-          <div className="flex items-center space-x-2">
-            <select
-              value={newTask.category}
-              onChange={(e) => setNewTask({ ...newTask, category: e.target.value })}
-              className="border rounded-lg px-4 py-2 flex-shrink-0 text-lg"
-            >
-              {['E', 'S', 'M', 'L', 'H'].map(cat => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
-              ))}
-            </select>
-            <input
-              type="text"
-              value={newTask.text}
-              placeholder="タスク名"
-              onChange={(e) => setNewTask({ ...newTask, text: e.target.value })}
-              className="flex-grow border rounded-lg px-4 py-2 text-lg"
-            />
-            <input
-              type="number"
-              value={newTask.duration}
-              placeholder="分"
-              onChange={(e) => setNewTask({ ...newTask, duration: e.target.value })}
-              className="w-24 border rounded-lg px-4 py-2 text-lg flex-shrink-0"
-            />
-          </div>
-          <button onClick={addCustomTask} className="bg-blue-500 text-white rounded-lg px-4 py-3 text-xl">
-            <Plus size={28} />
+
+      <div className="bg-white p-4 rounded-lg shadow-md space-y-4">
+        <h3 className="text-xl font-semibold text-gray-800">新しいタスクを追加</h3>
+        <div className="flex flex-col space-y-3">
+          <input
+            type="text"
+            placeholder="タスク名"
+            value={newTask.text}
+            onChange={(e) => setNewTask((prev) => ({ ...prev, text: e.target.value }))}
+            className="p-2 border rounded-lg"
+          />
+          <input
+            type="number"
+            placeholder="時間（分）"
+            value={newTask.duration}
+            onChange={(e) => setNewTask((prev) => ({ ...prev, duration: e.target.value }))}
+            className="p-2 border rounded-lg"
+          />
+          <button
+            onClick={addTask}
+            className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-700"
+          >
+            タスクを追加
           </button>
         </div>
       </div>
