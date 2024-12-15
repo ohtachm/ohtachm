@@ -3,16 +3,29 @@ import { CheckCircle, Circle, Plus } from "lucide-react";
 
 const TodoApp = () => {
   const [schedule, setSchedule] = useState([
-    // データは省略
+    {
+      time: "4:00",
+      tasks: [
+        { id: "1", text: "ポットスイッチ", completed: false },
+        { id: "2", text: "うがい", completed: false },
+        { id: "3", text: "洗濯", completed: false },
+        { id: "4", text: "ヨガ（10分）", completed: false, category: "S", duration: 10 },
+        { id: "5", text: "体重測定", completed: false },
+        { id: "6", text: "身支度（15分）", completed: false },
+        { id: "7", text: "白湯", completed: false },
+        { id: "8", text: "記録・スケジュール（15分）", completed: false, category: "S", duration: 15 },
+        { id: "9", text: "洗濯物干し（15分）", completed: false, category: "H", duration: 15 },
+      ],
+    },
+    {
+      time: "5:00",
+      tasks: [
+        { id: "a", text: "コーヒー", completed: false },
+        { id: "b", text: "読書（15分）", completed: false, category: "S", duration: 15 },
+        { id: "c", text: "最重要タスク①（15分）", completed: false, category: "S", duration: 15 },
+      ],
+    },
   ]);
-
-  const [customTasks, setCustomTasks] = useState({
-    E: [],
-    S: [],
-    M: [],
-    L: [],
-    H: [],
-  });
 
   const [newTask, setNewTask] = useState({
     category: "E",
@@ -23,17 +36,8 @@ const TodoApp = () => {
   const toggleTask = (timeIndex, taskId) => {
     const newSchedule = [...schedule];
     const task = newSchedule[timeIndex].tasks.find((t) => t.id === taskId);
-    if (task) {
-      task.completed = !task.completed;
-    }
+    if (task) task.completed = !task.completed;
     setSchedule(newSchedule);
-  };
-
-  const toggleCustomTask = (category, index) => {
-    const newCustomTasks = { ...customTasks };
-    newCustomTasks[category][index].completed =
-      !newCustomTasks[category][index].completed;
-    setCustomTasks(newCustomTasks);
   };
 
   const resetTasks = () => {
@@ -42,36 +46,17 @@ const TodoApp = () => {
       tasks: timeBlock.tasks.map((task) => ({ ...task, completed: false })),
     }));
     setSchedule(resetSchedule);
-
-    const resetCustomTasks = { ...customTasks };
-    Object.keys(resetCustomTasks).forEach((category) => {
-      resetCustomTasks[category] = resetCustomTasks[category].map((task) => ({
-        ...task,
-        completed: false,
-      }));
-    });
-    setCustomTasks(resetCustomTasks);
   };
 
   const addCustomTask = () => {
-    if (newTask.text) {
+    if (newTask.text.trim()) {
       const taskToAdd = {
         text: `${newTask.text}（${newTask.duration}分）`,
         completed: false,
         category: newTask.category,
-        duration: parseInt(newTask.duration),
+        duration: newTask.duration,
       };
-
-      setCustomTasks((prev) => ({
-        ...prev,
-        [newTask.category]: [...prev[newTask.category], taskToAdd],
-      }));
-
-      setNewTask({
-        category: "E",
-        text: "",
-        duration: 5,
-      });
+      setNewTask({ category: "E", text: "", duration: 5 });
     }
   };
 
@@ -82,60 +67,45 @@ const TodoApp = () => {
     categories.forEach((category) => {
       const scheduledTime = schedule.reduce((total, timeBlock) => {
         const categoryTime = timeBlock.tasks
-          .filter(
-            (task) => task.category === category && task.duration && task.completed
-          )
-          .reduce((sum, task) => sum + task.duration, 0);
+          .filter((task) => task.category === category && task.completed)
+          .reduce((sum, task) => sum + (task.duration || 0), 0);
         return total + categoryTime;
       }, 0);
-
-      const customTime = customTasks[category].reduce((total, task) => {
-        return task.completed ? total + task.duration : total;
-      }, 0);
-
-      summary[category] = scheduledTime + customTime;
+      summary[category] = scheduledTime;
     });
 
     return summary;
-  }, [schedule, customTasks]);
+  }, [schedule]);
 
   return (
     <div className="max-w-screen-sm mx-auto bg-gray-100 min-h-screen p-4">
       <div className="bg-white shadow-md rounded-lg">
-        <div className="flex justify-between items-center p-4 border-b">
-          <h1 className="text-xl font-bold text-gray-800">My Routine</h1>
-          <button
-            onClick={resetTasks}
-            className="text-blue-500 hover:text-blue-700 transition-colors"
-          >
+        <header className="flex justify-between items-center p-4 border-b">
+          <h1 className="text-xl font-bold">My Routine</h1>
+          <button onClick={resetTasks} className="text-blue-500 hover:underline">
             リセット
           </button>
-        </div>
+        </header>
 
-        <div className="p-4 bg-gray-50 border-b">
-          <h2 className="text-lg font-semibold mb-2">チェック済み時間</h2>
-          <div className="grid grid-cols-3 gap-2 text-center">
+        <section className="p-4 border-b bg-gray-50">
+          <h2 className="text-lg font-semibold mb-3">チェック済み時間</h2>
+          <div className="grid grid-cols-3 gap-4 text-center">
             {Object.entries(timeSummary).map(([category, time]) => (
-              <div
-                key={category}
-                className="bg-white p-2 rounded shadow-sm text-sm"
-              >
-                <div className="font-bold text-gray-700">{category}</div>
+              <div key={category} className="bg-white p-2 rounded shadow-sm">
+                <div className="font-bold">{category}</div>
                 <div className="text-blue-600">{time}分</div>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        <div className="p-4 border-b">
-          <h2 className="text-lg font-semibold mb-2">タスクを追加</h2>
-          <div className="space-y-2">
+        <section className="p-4 border-b">
+          <h2 className="text-lg font-semibold mb-3">タスクを追加</h2>
+          <div className="flex flex-col gap-3">
             <select
               value={newTask.category}
-              onChange={(e) =>
-                setNewTask((prev) => ({ ...prev, category: e.target.value }))
-              }
-              className="w-full border rounded p-2"
+              onChange={(e) => setNewTask((prev) => ({ ...prev, category: e.target.value }))}
+              className="border p-2 rounded"
             >
               {["E", "S", "M", "L", "H"].map((cat) => (
                 <option key={cat} value={cat}>
@@ -147,66 +117,49 @@ const TodoApp = () => {
               type="text"
               placeholder="タスク名"
               value={newTask.text}
-              onChange={(e) =>
-                setNewTask((prev) => ({ ...prev, text: e.target.value }))
-              }
-              className="w-full border rounded p-2"
+              onChange={(e) => setNewTask((prev) => ({ ...prev, text: e.target.value }))}
+              className="border p-2 rounded"
             />
             <select
               value={newTask.duration}
-              onChange={(e) =>
-                setNewTask((prev) => ({
-                  ...prev,
-                  duration: parseInt(e.target.value),
-                }))
-              }
-              className="w-full border rounded p-2"
+              onChange={(e) => setNewTask((prev) => ({ ...prev, duration: parseInt(e.target.value) }))}
+              className="border p-2 rounded"
             >
-              {[5, 10, 15, 20, 30].map((duration) => (
-                <option key={duration} value={duration}>
-                  {duration}分
+              {[5, 10, 15, 20, 30].map((time) => (
+                <option key={time} value={time}>
+                  {time}分
                 </option>
               ))}
             </select>
-            <button
-              onClick={addCustomTask}
-              className="w-full bg-blue-500 text-white rounded p-2 flex items-center justify-center"
-            >
-              <Plus size={20} className="mr-2" />
+            <button onClick={addCustomTask} className="bg-blue-500 text-white p-2 rounded">
               タスクを追加
             </button>
           </div>
-        </div>
+        </section>
 
-        {schedule.map((timeBlock, timeIndex) => (
-          <div key={timeBlock.time} className="p-4 border-b">
-            <h2 className="text-lg font-semibold text-gray-700 mb-3">
-              {timeBlock.time}
-            </h2>
-            {timeBlock.tasks.map((task) => (
-              <div
-                key={task.id}
-                className="flex items-center mb-2 cursor-pointer"
-                onClick={() => toggleTask(timeIndex, task.id)}
-              >
-                {task.completed ? (
-                  <CheckCircle color="lightblue" size={24} className="mr-3" />
-                ) : (
-                  <Circle color="gray" size={24} className="mr-3" />
-                )}
-                <span
-                  className={`text-sm ${
-                    task.completed
-                      ? "line-through text-gray-400"
-                      : "text-gray-800"
-                  }`}
+        <section>
+          {schedule.map((timeBlock, timeIndex) => (
+            <div key={timeBlock.time} className="p-4 border-b">
+              <h2 className="text-lg font-semibold mb-3">{timeBlock.time}</h2>
+              {timeBlock.tasks.map((task) => (
+                <div
+                  key={task.id}
+                  className="flex items-center mb-2 cursor-pointer"
+                  onClick={() => toggleTask(timeIndex, task.id)}
                 >
-                  {task.text}
-                </span>
-              </div>
-            ))}
-          </div>
-        ))}
+                  {task.completed ? (
+                    <CheckCircle color="lightblue" size={24} className="mr-2" />
+                  ) : (
+                    <Circle color="gray" size={24} className="mr-2" />
+                  )}
+                  <span className={task.completed ? "line-through text-gray-400" : "text-gray-800"}>
+                    {task.text}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ))}
+        </section>
       </div>
     </div>
   );
