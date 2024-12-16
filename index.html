@@ -2,106 +2,158 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>My Routine</title>
+    <title>My Elegant Routine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 20px;
-            line-height: 1.5;
-            font-size: 64px; /* Quadrupled from original 16px */
-            background-color: #f4f4f4;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
+            padding: 0;
         }
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(135deg, #f6f8f9 0%, #e5ebee 100%);
             color: #333;
-            font-size: 128px; /* Quadrupled for header */
+            line-height: 1.8;
+            font-size: 90px;
+            padding: 40px 20px;
         }
-        .container {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
             overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+        }
+        .header h1 {
+            font-size: 120px;
+            font-weight: 600;
+            letter-spacing: -3px;
         }
         .summary-container {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
-            gap: 10px;
+            padding: 30px;
+            background-color: #f4f7f9;
         }
         .summary-column {
             flex: 1;
+            text-align: center;
             background-color: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin: 0 15px;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        .summary-column:hover {
+            transform: scale(1.05);
+        }
+        .summary-column h3 {
+            font-size: 60px;
+            color: #2575fc;
+            margin-bottom: 10px;
         }
         .input-container {
-            background-color: white;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             display: flex;
-            gap: 10px;
+            justify-content: space-between;
+            padding: 40px;
+            background-color: #ffffff;
+            gap: 20px;
+        }
+        select, input, button {
+            flex: 1;
+            padding: 20px;
+            font-size: 50px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        button {
+            background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        button:hover {
+            opacity: 0.9;
         }
         .routine-list {
-            flex-grow: 1;
+            max-height: 800px;
             overflow-y: auto;
-            padding-right: 10px;
+            padding: 20px;
+            background-color: #f9fafb;
         }
         .task-list {
             background-color: white;
-            margin-bottom: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            padding: 30px;
         }
         .task-time {
-            font-size: 72px; /* Quadrupled from original 18px */
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
+            font-size: 70px;
+            font-weight: 600;
+            color: #2575fc;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #f0f0f0;
+            padding-bottom: 15px;
         }
         .task-item {
             display: flex;
             align-items: center;
-            margin-bottom: 5px;
+            margin-bottom: 30px;
+            transition: background-color 0.3s ease;
+            padding: 10px;
+            border-radius: 15px;
+        }
+        .task-item:hover {
+            background-color: #f4f7f9;
         }
         .task-item.completed {
+            opacity: 0.5;
             text-decoration: line-through;
-            color: #888;
         }
         .checkbox {
-            width: 80px; /* Quadrupled from original 20px */
-            height: 80px; /* Quadrupled from original 20px */
-            border: 8px solid #87ceeb; /* Quadrupled border width */
+            width: 80px;
+            height: 80px;
+            border: 8px solid #2575fc;
             border-radius: 50%;
-            margin-right: 10px;
+            margin-right: 30px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .checkbox:hover {
+            background-color: rgba(37, 117, 252, 0.1);
+        }
+        .checkbox.checked {
+            background-color: #2575fc;
         }
         .checkbox.checked::after {
             content: '✓';
-            color: #87ceeb;
-            font-size: 56px; /* Quadrupled from original 14px */
-        }
-        input, select, button {
-            padding: 20px; /* Increased padding */
-            font-size: 56px; /* Quadrupled from original 14px */
+            color: white;
+            font-size: 50px;
         }
     </style>
 </head>
 <body>
-    <h1>My Routine</h1>
-    
-    <div class="container">
+    <div class="app-container">
+        <div class="header">
+            <h1>My Routine</h1>
+        </div>
+        
         <div class="summary-container">
             <div class="summary-column" id="eColumn">
                 <h3>E</h3>
@@ -203,7 +255,6 @@
             ]}
         ];
 
-        // 具体的なカテゴリーリストを定義
         const categoryLists = {
             'E': ['英語①', '英語②', '手帳→英作文', '学級通信'],
             'S': ['ヨガ', '記録・スケジュール', '読書', '最重要タスク①', '最重要タスク②', '教材研究①', '教材研究②', 'Workplace', 'ウォーキング', 'スクワット', '入浴・瞑想', '新宝島動画分析', '向国論文', 'Expressive Writing'],
@@ -218,7 +269,6 @@
             routine.forEach(block => {
                 block.tasks.forEach(task => {
                     if (task.completed) {
-                        // 各カテゴリーのリストと照合
                         for (let category in categoryLists) {
                             if (categoryLists[category].some(item => task.name.includes(item))) {
                                 summary[category] += task.time;
@@ -298,15 +348,3 @@
                     if (task.name === taskName) {
                         task.completed = !task.completed;
                     }
-                });
-            });
-            
-            renderSummary();
-        }
-
-        // Initialize
-        renderSummary();
-        renderRoutine();
-    </script>
-</body>
-</html>
