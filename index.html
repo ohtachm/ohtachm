@@ -9,7 +9,7 @@
             margin: 0;
             padding: 20px;
             line-height: 1.5;
-            font-size: 32px; /* Doubled from 16px */
+            font-size: 64px; /* Quadrupled from original 16px */
             background-color: #f4f4f4;
             display: flex;
             flex-direction: column;
@@ -19,7 +19,7 @@
             text-align: center;
             margin-bottom: 20px;
             color: #333;
-            font-size: 64px; /* Doubled for header */
+            font-size: 128px; /* Quadrupled for header */
         }
         .container {
             display: flex;
@@ -62,7 +62,7 @@
             padding: 15px;
         }
         .task-time {
-            font-size: 36px; /* Doubled from 18px */
+            font-size: 72px; /* Quadrupled from original 18px */
             font-weight: bold;
             color: #333;
             margin-bottom: 10px;
@@ -77,9 +77,9 @@
             color: #888;
         }
         .checkbox {
-            width: 40px; /* Doubled from 20px */
-            height: 40px; /* Doubled from 20px */
-            border: 4px solid #87ceeb; /* Doubled border width */
+            width: 80px; /* Quadrupled from original 20px */
+            height: 80px; /* Quadrupled from original 20px */
+            border: 8px solid #87ceeb; /* Quadrupled border width */
             border-radius: 50%;
             margin-right: 10px;
             cursor: pointer;
@@ -90,11 +90,11 @@
         .checkbox.checked::after {
             content: '✓';
             color: #87ceeb;
-            font-size: 28px; /* Doubled from 14px */
+            font-size: 56px; /* Quadrupled from original 14px */
         }
         input, select, button {
-            padding: 10px; /* Increased padding */
-            font-size: 28px; /* Doubled from 14px */
+            padding: 20px; /* Increased padding */
+            font-size: 56px; /* Quadrupled from original 14px */
         }
     </style>
 </head>
@@ -155,27 +155,25 @@
             { time: '4:30', tasks: [
                 { name: 'ポットスイッチ→うがい→洗濯', category: 'H', completed: false, time: 5 },
                 { name: 'ヨガ（10分）', category: 'S', completed: false, time: 10 },
-                { name: '英語（15分）', category: 'E', completed: false, time: 15 },
                 { name: '体重測定', category: 'S', completed: false, time: 5 },
                 { name: '身支度', category: 'S', completed: false, time: 5 },
                 { name: '白湯', category: 'S', completed: false, time: 5 },
                 { name: '記録・スケジュール（15分）', category: 'S', completed: false, time: 15 },
+                { name: '英語①（15分）', category: 'E', completed: false, time: 15 },
                 { name: '洗濯物干し（15分）', category: 'H', completed: false, time: 15 }
             ]},
-            { time: '5:30', tasks: [
+            { time: '5:45', tasks: [
                 { name: 'コーヒー', category: 'S', completed: false, time: 5 },
                 { name: '読書（15分）', category: 'S', completed: false, time: 15 },
                 { name: '最重要タスク①（15分）', category: 'S', completed: false, time: 15 },
                 { name: '最重要タスク②（15分）', category: 'S', completed: false, time: 15 }
             ]},
-            { time: '6:00', tasks: [
-                { name: '最重要タスク③（15分）', category: 'S', completed: false, time: 15 },
-                { name: '教材研究（15分）', category: 'S', completed: false, time: 15 },
-                { name: 'Workplace（15分）', category: 'S', completed: false, time: 15 },
+            { time: '7:00', tasks: [
+                { name: '教材研究①（15分）', category: 'S', completed: false, time: 15 },
+                { name: '教材研究②（15分）', category: 'S', completed: false, time: 15 },
                 { name: 'ウォーキング（15分）', category: 'S', completed: false, time: 15 }
             ]},
             { time: '7:30', tasks: [
-                { name: '英語①（15分）', category: 'E', completed: false, time: 15 },
                 { name: '英語②（15分）', category: 'E', completed: false, time: 15 },
                 { name: '英単語（5分）', category: 'E', completed: false, time: 5 }
             ]},
@@ -184,35 +182,34 @@
                 { name: '教材研究（30分）', category: 'S', completed: false, time: 30 },
                 { name: '日記コメント（15分）', category: 'M', completed: false, time: 15 }
             ]},
-            { time: '17:30', tasks: [
+            { time: '17:45', tasks: [
                 { name: '風呂スイッチ', category: 'H', completed: false, time: 5 },
                 { name: '掃除（5分）', category: 'H', completed: false, time: 5 },
                 { name: 'スクワット（5分）', category: 'S', completed: false, time: 5 },
                 { name: 'ヨーグルト・フルグラ（5分）', category: 'L', completed: false, time: 5 },
                 { name: '入浴・瞑想（15分）', category: 'S', completed: false, time: 15 }
             ]},
-            { time: '18:15', tasks: [
+            { time: '18:30', tasks: [
                 { name: 'Workplace（30分）', category: 'S', completed: false, time: 30 },
                 { name: '新宝島動画分析（15分）', category: 'S', completed: false, time: 15 },
                 { name: '向国論文（15分）', category: 'S', completed: false, time: 15 }
             ]},
-            { time: '19:20', tasks: [
-                { name: '日記コメント（15分）', category: 'M', completed: false, time: 15 },
-                { name: '手帳→英作文（15分）', category: 'E', completed: false, time: 15 }
+            { time: '19:30', tasks: [
+                { name: '日記コメント（10分）', category: 'M', completed: false, time: 10 },
+                { name: '手帳→英作文（10分）', category: 'E', completed: false, time: 10 }
             ]},
             { time: '21:00', tasks: [
-                { name: 'Expressive Writing（15分）', category: 'S', completed: false, time: 15 },
-                { name: '読書（15分）', category: 'S', completed: false, time: 15 }
+                { name: 'Expressive Writing（30分）', category: 'S', completed: false, time: 30 }
             ]}
         ];
 
         // 具体的なカテゴリーリストを定義
         const categoryLists = {
-            'E': ['英語①', '英語②', '手帳→英作文'],
-            'S': ['英語①', '英語②', '手帳→英作文', 'ヨガ', '記録・スケジュール', '読書', '最重要タスク①', '最重要タスク②', '最重要タスク③', '教材研究', 'Workplace', 'ウォーキング', 'スクワット', '入浴・瞑想', '新宝島動画分析', '向国論文', 'Expressive Writing'],
+            'E': ['英語①', '英語②', '手帳→英作文', '学級通信'],
+            'S': ['ヨガ', '記録・スケジュール', '読書', '最重要タスク①', '最重要タスク②', '教材研究①', '教材研究②', 'Workplace', 'ウォーキング', 'スクワット', '入浴・瞑想', '新宝島動画分析', '向国論文', 'Expressive Writing'],
             'M': ['日記コメント'],
             'L': ['ヨーグルト・フルグラ'],
-            'H': ['洗濯物干し', '掃除']
+            'H': ['洗濯物干し', '掃除', '風呂スイッチ']
         };
 
         function calculateCompletedCategoryTime() {
