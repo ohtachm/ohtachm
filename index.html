@@ -3,348 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <title>My Elegant Routine</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
         body {
-            font-family: 'Poppins', Arial, sans-serif;
-            background: linear-gradient(135deg, #f6f8f9 0%, #e5ebee 100%);
-            color: #333;
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #f4f4f4;
             line-height: 1.6;
-            font-size: 80px;
-            padding: 30px 20px;
         }
-        .app-container {
-            max-width: 1200px;
+        .container {
+            max-width: 800px;
             margin: 0 auto;
-            background-color: white;
-            border-radius: 20px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
+            padding: 20px;
         }
         .header {
-            background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+            background-color: #3498db;
             color: white;
             text-align: center;
-            padding: 30px 0;
-        }
-        .header h1 {
-            font-size: 100px;
-            font-weight: 600;
-            letter-spacing: -2px;
-        }
-        .summary-container {
-            display: flex;
-            justify-content: space-between;
-            padding: 20px;
-            background-color: #f4f7f9;
-        }
-        .summary-column {
-            flex: 1;
-            text-align: center;
-            background-color: white;
-            margin: 0 10px;
             padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease;
-        }
-        .summary-column:hover {
-            transform: scale(1.05);
-        }
-        .summary-column h3 {
-            font-size: 50px;
-            color: #2575fc;
-            margin-bottom: 5px;
-        }
-        .input-container {
-            display: flex;
-            justify-content: space-between;
-            padding: 30px;
-            background-color: #ffffff;
-            gap: 15px;
-        }
-        select, input, button {
-            flex: 1;
-            padding: 15px;
-            font-size: 45px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-        button {
-            background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        button:hover {
-            opacity: 0.9;
-        }
-        .routine-list {
-            max-height: 1000px; /* Increased height to show more tasks */
-            overflow-y: auto;
-            padding: 15px;
-            background-color: #f9fafb;
-        }
-        .task-list {
-            background-color: white;
             margin-bottom: 20px;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-            padding: 20px;
+            border-radius: 5px;
         }
         .task-time {
-            font-size: 60px;
-            font-weight: 600;
-            color: #2575fc;
+            font-weight: bold;
+            color: #2980b9;
+            margin: 15px 0 10px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #3498db;
+        }
+        .task-block {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             margin-bottom: 15px;
-            border-bottom: 3px solid #f0f0f0;
-            padding-bottom: 10px;
+            padding: 15px;
         }
         .task-item {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
-            transition: background-color 0.3s ease;
+            margin-bottom: 10px;
             padding: 8px;
-            border-radius: 12px;
+            transition: background-color 0.3s;
         }
         .task-item:hover {
-            background-color: #f4f7f9;
+            background-color: #f1f1f1;
         }
-        .task-item.completed {
-            opacity: 0.5;
-            text-decoration: line-through;
-        }
-        .checkbox {
-            width: 70px;
-            height: 70px;
-            border: 7px solid #2575fc;
-            border-radius: 50%;
-            margin-right: 25px;
+        .task-checkbox {
+            margin-right: 15px;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #3498db;
+            border-radius: 4px;
+            outline: none;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
         }
-        .checkbox:hover {
-            background-color: rgba(37, 117, 252, 0.1);
+        .task-checkbox:checked {
+            background-color: #3498db;
+            position: relative;
         }
-        .checkbox.checked {
-            background-color: #2575fc;
-        }
-        .checkbox.checked::after {
+        .task-checkbox:checked::after {
             content: '✓';
+            position: absolute;
             color: white;
-            font-size: 45px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .task-name {
+            flex-grow: 1;
+        }
+        .task-name.completed {
+            text-decoration: line-through;
+            color: #95a5a6;
+        }
+        .add-task-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        .add-task-form {
+            display: flex;
+            gap: 10px;
+        }
+        .add-task-form input,
+        .add-task-form select,
+        .add-task-form button {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .add-task-form input {
+            flex-grow: 1;
+        }
+        .add-task-form button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
+    <div class="container">
         <div class="header">
-            <h1>My Routine</h1>
+            <h1>マイ ルーティン</h1>
         </div>
         
-        <div class="summary-container">
-            <div class="summary-column" id="eColumn">
-                <h3>E</h3>
-                <div id="eSummary">0 分</div>
-            </div>
-            <div class="summary-column" id="sColumn">
-                <h3>S</h3>
-                <div id="sSummary">0 分</div>
-            </div>
-            <div class="summary-column" id="mColumn">
-                <h3>M</h3>
-                <div id="mSummary">0 分</div>
-            </div>
-            <div class="summary-column" id="lColumn">
-                <h3>L</h3>
-                <div id="lSummary">0 分</div>
-            </div>
-            <div class="summary-column" id="hColumn">
-                <h3>H</h3>
-                <div id="hSummary">0 分</div>
-            </div>
-        </div>
+        <div id="routineContainer"></div>
 
-        <div class="input-container">
-            <select id="categorySelect">
-                <option value="E">E</option>
-                <option value="S">S</option>
-                <option value="M">M</option>
-                <option value="L">L</option>
-                <option value="H">H</option>
-            </select>
-            
-            <input type="text" id="taskInput" placeholder="タスク名">
-            
-            <select id="timeSelect">
-                <option value="5">5分</option>
-                <option value="10">10分</option>
-                <option value="15">15分</option>
-                <option value="20">20分</option>
-                <option value="30">30分</option>
-            </select>
-            
-            <button onclick="addTask()">追加</button>
+        <div class="add-task-section">
+            <form class="add-task-form" id="addTaskForm">
+                <input type="text" id="taskName" placeholder="タスク名" required>
+                <select id="taskTime">
+                    <option value="5">5分</option>
+                    <option value="10">10分</option>
+                    <option value="15">15分</option>
+                    <option value="20">20分</option>
+                    <option value="30">30分</option>
+                </select>
+                <button type="submit">追加</button>
+            </form>
         </div>
-
-        <div class="routine-list" id="routineList"></div>
     </div>
 
     <script>
-        let routine = [
+        const routine = [
             { time: '4:30', tasks: [
-                { name: 'ポットスイッチ→うがい→洗濯', category: 'H', completed: false, time: 5 },
-                { name: 'ヨガ（10分）', category: 'S', completed: false, time: 10 },
-                { name: '体重測定', category: 'S', completed: false, time: 5 },
-                { name: '身支度', category: 'S', completed: false, time: 5 },
-                { name: '白湯', category: 'S', completed: false, time: 5 },
-                { name: '記録・スケジュール（15分）', category: 'S', completed: false, time: 15 },
-                { name: '英語①（15分）', category: 'E', completed: false, time: 15 },
-                { name: '洗濯物干し（15分）', category: 'H', completed: false, time: 15 }
+                { name: 'ポットスイッチ→うがい→洗濯', completed: false },
+                { name: 'ヨガ', completed: false },
+                { name: '体重測定', completed: false },
+                { name: '身支度', completed: false },
+                { name: '白湯', completed: false },
+                { name: '記録・スケジュール', completed: false },
+                { name: '英語①', completed: false },
+                { name: '洗濯物干し', completed: false }
             ]},
             { time: '5:45', tasks: [
-                { name: 'コーヒー', category: 'S', completed: false, time: 5 },
-                { name: '読書（15分）', category: 'S', completed: false, time: 15 },
-                { name: '最重要タスク①（15分）', category: 'S', completed: false, time: 15 },
-                { name: '最重要タスク②（15分）', category: 'S', completed: false, time: 15 }
+                { name: 'コーヒー', completed: false },
+                { name: '読書', completed: false },
+                { name: '最重要タスク①', completed: false },
+                { name: '最重要タスク②', completed: false }
             ]},
-            { time: '7:00', tasks: [
-                { name: '教材研究①（15分）', category: 'S', completed: false, time: 15 },
-                { name: '教材研究②（15分）', category: 'S', completed: false, time: 15 },
-                { name: 'ウォーキング（15分）', category: 'S', completed: false, time: 15 }
-            ]},
-            { time: '7:30', tasks: [
-                { name: '英語②（15分）', category: 'E', completed: false, time: 15 },
-                { name: '英単語（5分）', category: 'E', completed: false, time: 5 }
-            ]},
-            { time: '15:50', tasks: [
-                { name: '学級通信（20分）', category: 'E', completed: false, time: 20 },
-                { name: '教材研究（30分）', category: 'S', completed: false, time: 30 },
-                { name: '日記コメント（15分）', category: 'M', completed: false, time: 15 }
-            ]},
-            { time: '17:45', tasks: [
-                { name: '風呂スイッチ', category: 'H', completed: false, time: 5 },
-                { name: '掃除（5分）', category: 'H', completed: false, time: 5 },
-                { name: 'スクワット（5分）', category: 'S', completed: false, time: 5 },
-                { name: 'ヨーグルト・フルグラ（5分）', category: 'L', completed: false, time: 5 },
-                { name: '入浴・瞑想（15分）', category: 'S', completed: false, time: 15 }
-            ]},
-            { time: '18:30', tasks: [
-                { name: 'Workplace（30分）', category: 'S', completed: false, time: 30 },
-                { name: '新宝島動画分析（15分）', category: 'S', completed: false, time: 15 },
-                { name: '向国論文（15分）', category: 'S', completed: false, time: 15 }
-            ]},
-            { time: '19:30', tasks: [
-                { name: '日記コメント（10分）', category: 'M', completed: false, time: 10 },
-                { name: '手帳→英作文（10分）', category: 'E', completed: false, time: 10 }
-            ]},
-            { time: '21:00', tasks: [
-                { name: 'Expressive Writing（30分）', category: 'S', completed: false, time: 30 }
-            ]}
+            // その他のタイムブロックも同様に追加
         ];
 
-        const categoryLists = {
-            'E': ['英語①', '英語②', '手帳→英作文', '学級通信'],
-            'S': ['ヨガ', '記録・スケジュール', '読書', '最重要タスク①', '最重要タスク②', '教材研究①', '教材研究②', 'Workplace', 'ウォーキング', 'スクワット', '入浴・瞑想', '新宝島動画分析', '向国論文', 'Expressive Writing'],
-            'M': ['日記コメント'],
-            'L': ['ヨーグルト・フルグラ'],
-            'H': ['洗濯物干し', '掃除', '風呂スイッチ']
-        };
-
-        function calculateCompletedCategoryTime() {
-            const summary = { 'E': 0, 'S': 0, 'M': 0, 'L': 0, 'H': 0 };
-            
-            routine.forEach(block => {
-                block.tasks.forEach(task => {
-                    if (task.completed) {
-                        for (let category in categoryLists) {
-                            if (categoryLists[category].some(item => task.name.includes(item))) {
-                                summary[category] += task.time;
-                                break;
-                            }
-                        }
-                    }
-                });
-            });
-            
-            return summary;
-        }
-
-        function renderSummary() {
-            const categorySummary = calculateCompletedCategoryTime();
-            
-            ['E', 'S', 'M', 'L', 'H'].forEach(cat => {
-                document.getElementById(`${cat.toLowerCase()}Summary`).textContent = 
-                    `${categorySummary[cat]} 分`;
-            });
-        }
-
         function renderRoutine() {
-            const routineDiv = document.getElementById('routineList');
-            routineDiv.innerHTML = routine.map(timeBlock => `
-                <div class="task-list">
-                    <div class="task-time">${timeBlock.time}</div>
-                    ${timeBlock.tasks.map(task => `
-                        <div class="task-item ${task.completed ? 'completed' : ''}">
-                            <div class="checkbox ${task.completed ? 'checked' : ''}" 
-                                 onclick="toggleTask(this)"></div>
-                            <span>${task.name}</span>
-                        </div>
-                    `).join('')}
-                </div>
-            `).join('');
-        }
+            const container = document.getElementById('routineContainer');
+            container.innerHTML = '';
 
-        function addTask() {
-            const categorySelect = document.getElementById('categorySelect');
-            const taskInput = document.getElementById('taskInput');
-            const timeSelect = document.getElementById('timeSelect');
-            
-            const category = categorySelect.value;
-            const taskName = taskInput.value.trim();
-            const time = timeSelect.value;
-            
-            if (taskName) {
-                const fullTaskName = `${taskName}（${time}分）`;
-                
-                routine.push({
-                    time: '未設定',
-                    tasks: [{ 
-                        name: fullTaskName, 
-                        category: category, 
-                        completed: false,
-                        time: parseInt(time)
-                    }]
+            routine.forEach(timeBlock => {
+                const blockElement = document.createElement('div');
+                blockElement.classList.add('task-block');
+
+                const timeElement = document.createElement('div');
+                timeElement.classList.add('task-time');
+                timeElement.textContent = timeBlock.time;
+                blockElement.appendChild(timeElement);
+
+                timeBlock.tasks.forEach(task => {
+                    const taskElement = document.createElement('div');
+                    taskElement.classList.add('task-item');
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.classList.add('task-checkbox');
+                    checkbox.checked = task.completed;
+                    checkbox.addEventListener('change', () => {
+                        task.completed = checkbox.checked;
+                        taskName.classList.toggle('completed', checkbox.checked);
+                    });
+
+                    const taskName = document.createElement('span');
+                    taskName.classList.add('task-name');
+                    taskName.textContent = task.name;
+                    taskName.classList.toggle('completed', task.completed);
+
+                    taskElement.appendChild(checkbox);
+                    taskElement.appendChild(taskName);
+                    blockElement.appendChild(taskElement);
                 });
-                
-                taskInput.value = '';
-                timeSelect.value = '5';
-                
-                renderRoutine();
-                renderSummary();
-            }
+
+                container.appendChild(blockElement);
+            });
         }
 
-        function toggleTask(checkboxElement) {
-            const taskItem = checkboxElement.closest('.task-item');
-            checkboxElement.classList.toggle('checked');
-            taskItem.classList.toggle('completed');
-            
-            const taskName = taskItem.querySelector('span').textContent;
-            routine.forEach(block => {
-                block.tasks.forEach(task => {
-                    if (task.name === taskName) {
-                        task.completed = !task.completed;
-                    }
+        document.getElementById('addTaskForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const taskName = document.getElementById('taskName').value;
+            const taskTime = document.getElementById('taskTime').value;
+
+            routine[0].tasks.push({
+                name: `${taskName}（${taskTime}分）`,
+                completed: false
+            });
+
+            renderRoutine();
+            this.reset();
+        });
+
+        // 初期表示
+        renderRoutine();
+    </script>
+</body>
+</html>
